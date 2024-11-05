@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  font-family: 'Rubik';
+}
+
+:root{
+  --primary-color: rgb(31, 60, 128);
+  --secondary-color: rgb(191, 162, 112);
+  --primary-color-9: rgba(31, 60, 128, .9);
+  --primary-color-8: rgba(31, 60, 128, .8);
+  --primary-color-7: rgba(31, 60, 128, .7);
+  --primary-color-6: rgba(31, 60, 128, .6);
+  --primary-color-5: rgba(31, 60, 128, .5);
+  --primary-color-4: rgba(31, 60, 128, .4);
+  --primary-color-3: rgba(31, 60, 128, .3);
+  --primary-color-2: rgba(31, 60, 128, .2);
+  --primary-color-1: rgba(31, 60, 128, .1);
+  --secondary-color-9: rgba(191, 162, 112, .9);
+  --secondary-color-8: rgba(191, 162, 112, .8);
+  --secondary-color-7: rgba(191, 162, 112, .7);
+  --secondary-color-6: rgba(191, 162, 112, .6);
+  --secondary-color-5: rgba(191, 162, 112, .5);
+  --secondary-color-4: rgba(191, 162, 112, .4);
+  --secondary-color-3: rgba(191, 162, 112, .3);
+  --secondary-color-2: rgba(191, 162, 112, .2);
+  --secondary-color-1: rgba(191, 162, 112, .1);
+  --broken-white: #f7fafc;
+  --gray: #79869f;
+}
+
+.container {
+  width: 80%;
+  max-width: 1200px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
