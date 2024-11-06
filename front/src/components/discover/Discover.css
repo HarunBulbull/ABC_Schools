@@ -14,6 +14,8 @@
     background-color: white;
     box-shadow: 0px 0px 10px rgba(0,0,0,.1);
     padding-top: 1rem;
+    overflow: hidden;
+    transition: ease .3s;
 }
 
 .sectionDiscover .discoverEvents {
@@ -93,6 +95,7 @@
     grid-template-columns: 30% 1fr;
     gap: 1rem;
     margin-top: 1rem;
+    align-items: center;
 }
 
 .sectionDiscover .discoverSectionMain .header h3{
@@ -103,12 +106,17 @@
     opacity: .8;
 }
 
+.sectionDiscover .discoverSectionMain .header .collapsedCalendarOpen{
+    cursor: pointer;
+    order: 6;
+}
+
 .sectionDiscover .discoverSectionMain .header .finderArea{
     background-color: white;
     box-shadow: 0px 0px 10px rgba(0,0,0,.1);
     display: grid;
     grid-template-columns: 1fr 30px;
-    max-height: 80px;
+    height: 50px;
     border-radius: 1rem;
 }
 
@@ -312,7 +320,6 @@
     background-color: var(--primary-color-1);
     padding: .5rem;
     color: var(--primary-color);
-    width: 30%;
     border-radius: .5rem;
 }
 
@@ -339,4 +346,41 @@
     box-shadow: 0px 0px 10px rgba(0,0,0,.1);
     text-decoration: none;
     border-radius: 5px;
+}
+
+@media (max-width: 1155px) {
+    .sectionDiscover{
+        grid-template-columns: 1fr;
+    }
+    .sectionDiscover .discoverSectionSidebar{
+        position: absolute;
+        z-index: 999;
+        right:  0;
+        top:0;
+    }
+    .sectionDiscover .discoverSectionMain .header{
+        grid-template-columns: 30% 1fr auto;
+    }
+}
+
+
+@media (max-width: 756px) {
+    .sectionDiscover .discoverSectionMain .header{
+        grid-template-columns: 1fr;
+    }
+    .sectionDiscover .discoverSectionMain .header .collapsedCalendarOpen{
+        justify-self: flex-end;
+    }
+    .sectionDiscover .discoverSectionMain .adArea{
+        aspect-ratio: 2/1;
+    }
+    .sectionDiscover .discoverSectionMain .bottomArea{
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    .sectionDiscover .discoverSectionMain .adArea{
+        aspect-ratio: 1/1;
+    }
 }

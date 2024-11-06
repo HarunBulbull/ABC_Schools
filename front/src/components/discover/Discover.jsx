@@ -5,6 +5,7 @@ import {
   PieChartOutlined,
   UserOutlined,
   CaretRightOutlined,
+  CaretLeftOutlined,
   ClockCircleOutlined,
   SearchOutlined,
   BellOutlined,
@@ -18,6 +19,11 @@ dayjs.locale('tr')
 
 
 function Discover() {
+  const [collapsed, setCollapsed] = useState(window.innerWidth < 1156 ? true : false);
+  window.addEventListener("resize", () => {
+    if(window.innerWidth < 1156){setCollapsed(true)}
+    else{setCollapsed(false)}
+  })
   const turkishMonths = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
   const turkishDays = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi']
 
@@ -82,14 +88,17 @@ function Discover() {
       <div className="discoverSectionMain">
 
         <div className="header">
-          <Flex vertical={true}>
+          <Flex vertical={true} style={{order: 2}}>
             <h3>Hızlı Arama</h3>
             <p>İstediğiniz konuyu, kişiyi ya da etkinliği anahtar kelimeler ile arayın.</p>
           </Flex>
-          <div className="finderArea">
+          <div className="finderArea" style={{order: 4}}>
             <input type="text" placeholder='Kişi... Hizmet... Etkinlik...' />
             <SearchOutlined className='searchIcon' />
           </div>
+          {collapsed && window.innerWidth<1156 &&
+            <p onClick={() => setCollapsed(false)} className='collapsedCalendarOpen'><CaretLeftOutlined/> Takvimim</p>
+          }
         </div>
 
         <div className="adArea">
@@ -145,7 +154,10 @@ function Discover() {
 
       </div>
 
-      <div className="discoverSectionSidebar">
+      <div className="discoverSectionSidebar" style={{width: collapsed ? "0" : "400px"}}>
+        {!collapsed && window.innerWidth < 1156 && 
+          <p onClick={() => setCollapsed(true)} style={{cursor: "pointer", paddingLeft: "1rem"}}><CaretRightOutlined/> Takvimim</p>
+        }
         <div className="userArea">
           <User info={{picture: '/assets/user.png', name: 'Uğur Özer'}}/>
           <BellOutlined className='bell'/>
