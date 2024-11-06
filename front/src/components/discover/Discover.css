@@ -1,0 +1,342 @@
+.sectionDiscover{
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 1rem;
+    padding-left: 1rem;
+    width: calc(100% - 1rem);
+}
+
+.sectionDiscover .discoverSectionSidebar{
+    width: 100%;
+    height: calc(100dvh - 1.5rem);
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.1);
+    padding-top: 1rem;
+}
+
+.sectionDiscover .discoverEvents {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sectionDiscover .discoverEvents .eventHeaderSelectedDay{
+    display: flex;
+    align-items: center;
+    color: var(--primary-color);
+    gap: .4rem;
+}
+
+.sectionDiscover .discoverEvents .eventHeaderToday{
+    opacity: .6;
+    cursor: pointer;
+    transition: ease .3s;
+}
+
+.sectionDiscover .discoverEvents .eventHeaderToday:hover{
+    opacity: 1;
+}
+
+.sectionDiscover .discoverEvents .eventHeaderSelectedDay p{opacity: .6;}
+
+.sectionDiscover .discoverEvents .allEvents .event{
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    padding-bottom: 1rem;
+}
+
+.sectionDiscover .discoverEvents .allEvents .event:nth-last-child(1){
+    border: none;
+    padding: none;
+}
+
+.sectionDiscover .discoverEvents .allEvents .event .eventIcon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5rem;
+    background-color: var(--primary-color);
+    color: var(--broken-white);
+    font-size: 20px;
+    border-radius: 5px;
+}
+
+.sectionDiscover .discoverEvents .allEvents .event h4{
+    color: var(--primary-color);
+}
+
+.sectionDiscover .discoverEvents .allEvents .event p{
+    opacity: .6;
+}
+
+.sectionDiscover .discoverEvents a{
+    text-decoration: none;
+    padding: 1rem;
+    width: calc(100% - 4rem);
+    background-color: var(--primary-color);
+    color: var(--broken-white);
+    margin-left: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.sectionDiscover .discoverSectionMain{
+    padding: 1rem;
+}
+
+.sectionDiscover .discoverSectionMain .header{
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.sectionDiscover .discoverSectionMain .header h3{
+    color: var(--primary-color);
+}
+
+.sectionDiscover .discoverSectionMain .header p{
+    opacity: .8;
+}
+
+.sectionDiscover .discoverSectionMain .header .finderArea{
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.1);
+    display: grid;
+    grid-template-columns: 1fr 30px;
+    max-height: 80px;
+    border-radius: 1rem;
+}
+
+.sectionDiscover .discoverSectionMain .header .finderArea input{
+    padding-left: 1rem;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.sectionDiscover .discoverSectionMain .header .finderArea .searchIcon{
+    font-size: 20px;
+}
+
+.sectionDiscover .discoverSectionMain .adArea{
+    margin-top: 2rem;
+    background-color: var(--primary-color-9);
+    padding: 2rem;
+    aspect-ratio: 7/1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    border-radius: 1rem;
+    box-shadow:
+    0px 0px 10px rgba(0,0,0,.2),
+    inset 0px 0px 10px var(--primary-color),
+    inset 0px 0px 20px var(--primary-color),
+    inset 0px 0px 30px var(--primary-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.sectionDiscover .discoverSectionMain .adArea .bgColor{
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom:0;
+    background-color: var(--secondary-color);
+    width: 50%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    filter: blur(100px);
+}
+
+.sectionDiscover .discoverSectionMain .adArea h1{
+    color: white;
+}
+
+.sectionDiscover .discoverSectionMain .adArea p{
+    color: var(--broken-white);
+    opacity: .8;
+}
+
+.sectionDiscover .discoverSectionMain .adArea a{
+    width: 200px;
+    height: 50px;
+    background-color: var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0,0,0,.2);
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea{
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .returnArea{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+    border-radius: 1rem;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .returnArea .returnHeader h2{
+    color: var(--primary-color)
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .returnArea .returnHeader a{
+    color: black;
+    opacity: .5;
+    text-decoration: none;
+    transition: ease .3s;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .returnArea .returnUsers{
+    border-bottom: 1px solid #ccc;
+    margin-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .returnArea .returnUsers:nth-last-child(1){
+    border: none;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .returnArea .returnUsers .messageIcon{
+    font-size: 20px;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .returnArea .returnHeader a:Hover{
+    opacity: 1;
+}
+
+.userArea{
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.userArea .bell{
+    font-size: 20px;
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.userArea .bell::after{
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    position: absolute;
+    transform: translate(50%, -50%);
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea h2{
+    color: black;
+    font-weight: 300;
+    font-size: 28px;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea .educationInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+    border-radius: 1rem;
+    padding: 1rem;
+    height: 100%;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea .educationInfo img{
+    width: 100%;
+    aspect-ratio: 16/6;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea .educationInfo .educationHeader{
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea .educationInfo .educationHeader .dotes{
+    cursor: pointer;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea .educationInfo .educationHeader .dotes .dot{
+    display: block;
+    width: 7px;
+    height: 7px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    margin-left: .3rem;
+    margin-top: 4px;
+    transition: ease .3s;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea .educationInfo .educationHeader .dotes:hover .dot{
+    background-color: var(--primary-color);
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea .educationInfo .clockArea{
+    background-color: var(--primary-color-1);
+    padding: .5rem;
+    color: var(--primary-color);
+    width: 30%;
+    border-radius: .5rem;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea .educationInfo .clockArea p{
+    opacity: 1;
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea .educationInfo .clockArea .divider{
+    display: block;
+    width: 1px;
+    height: 100%;
+    background-color: var(--primary-color);
+}
+
+.sectionDiscover .discoverSectionMain .bottomArea .educationArea .educationInfo a{
+    width: 100%;
+    padding: .5rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+    text-decoration: none;
+    color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.1);
+    text-decoration: none;
+    border-radius: 5px;
+}
