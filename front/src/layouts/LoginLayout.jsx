@@ -15,11 +15,11 @@ function LoginLayout() {
           <div className="loginInputs">
             <div className="inputArea">
               <UserOutlined className='inputIcon'/>
-              <input type="text" />
+              <input type="text" placeholder='T.C. Kimlik No'/>
             </div>
             <div className="inputArea">
               <LockOutlined lassName='inputIcon'/>
-              <input type="password" />
+              <input type="password" placeholder='Şifre'/>
             </div>
             <a href='/kesfet'>Giriş Yap</a>
           </div>

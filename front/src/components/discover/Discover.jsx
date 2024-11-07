@@ -44,18 +44,21 @@ function Discover() {
       icon: <ClockCircleOutlined/>,
       name: 'Webinar',
       category: 'Uzaktan',
-      time: '12:30 - 13:30'
+      time: '12:30 - 13:30',
+      date: dayjs('2024-11-06')
     },
     {
       icon: <PieChartOutlined/>,
       name: 'Rehberlik Toplantısı',
       category: 'Uzaktan',
-      time: '16:30 - 18:30'
+      time: '16:30 - 18:30',
+      date: dayjs('2024-11-07')
     },
     {
       icon: <UserOutlined/>,
       name: 'Değerlendirme Rapor Sonuçları',
-      category: 'Görevler'
+      category: 'Görevler',
+      date: dayjs('2024-11-08')
     }
   ]
 
@@ -173,6 +176,7 @@ function Discover() {
           </Flex>
           <Flex vertical={true} style={{padding: "0 1rem"}} gap="large" className='allEvents'>
             {events.map((ev, key) => (
+              ev.date.format('DD-MM-YYYY') === selectedDay.format('DD-MM-YYYY') &&
               <Flex key={key} align='center' justify='space-between' className='event'>
                 <Flex align='center' gap="middle">
                   <div className="eventIcon">{ev.icon}</div>

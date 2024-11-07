@@ -38,7 +38,7 @@ function MainLayout({ children }) {
   ]
 
   return (
-    <div className="mainGrid" style={collapsed ? {gridTemplateColumns: "50px 1fr"} : {}}>
+    <div className="mainGrid">
       <div className="panelArea" style={collapsed ? {width: "50px"} : {}}>
         <img src="/assets/mainlogo.png" alt="main_logo" style={collapsed ? {width: "30px"} : {}} />
         <ul>
@@ -48,11 +48,11 @@ function MainLayout({ children }) {
         </ul>
         <ul className='bottomPanel' style={collapsed ? {width: "50px"} : {}}>
           <li style={collapsed ? {width: "100%", padding: 0, justifyContent: "center"} : {}} onClick={() => {setActiveTab('/ayarlar'); nav('/ayarlar')}} className={activeTab === '/ayarlar'? 'activeTab' : ''}><p><SettingOutlined /></p><p style={collapsed ? {display: "none"} : {}}>Ayarlar</p></li>
-          <li style={collapsed ? {width: "100%", padding: 0, justifyContent: "center", display: window.innerWidth < 1156 ? "none" : ""} : {}} onClick={() => setCollapsed(!collapsed)}><p><CaretLeftOutlined className='collapseIcon' style={{rotate: collapsed ? "180deg" : "0deg"}}/></p><p style={collapsed ? {display: "none"} : {}}>Daralt</p></li>
+          <li style={collapsed ? {width: "100%", padding: 0, justifyContent: "center", display: window.innerWidth < 1156 ? "none" : ""} : {display: "flex"}} onClick={() => setCollapsed(!collapsed)}><p><CaretLeftOutlined className='collapseIcon' style={{rotate: collapsed ? "180deg" : "0deg"}}/></p><p style={collapsed ? {display: "none"} : {}}>Daralt</p></li>
           <li style={collapsed ? {width: "100%", padding: 0, justifyContent: "center"} : {}}><a style={collapsed ? {justifyContent: "center"} : {}} href='/login'><p><LogoutOutlined /></p><p style={collapsed ? {display: "none"} : {}}>Çıkış Yap</p></a></li>
         </ul>
       </div>
-      <div className="mainArea">
+      <div className="mainArea" style={collapsed ? {marginLeft: "50px", width: "calc(100% - 50px"} : {}}>
         {children}
       </div>
     </div>
