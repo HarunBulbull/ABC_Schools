@@ -26,7 +26,7 @@ function List() {
                 <h3>Veli Adı</h3>
                 <p>+90 (555) 555 55 55</p>
               </Flex>
-              <a href="#">Öğrenci İşlemleri <CaretRightOutlined/></a>
+              <a href="/ogrenci/obiziz">Öğrenci İşlemleri <CaretRightOutlined/></a>
             </div>
           ))}
           <div className="tableGrid3 tableHeader" style={{borderRadius: "0 0 1rem 1rem"}}>
