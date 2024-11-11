@@ -1,4 +1,28 @@
-.CalendarArea{
-    min-height: 100dvh;
+.eventsArea .event{
     padding: 1rem;
+    border-radius: 1rem;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+}
+
+
+.eventsArea .event .eventLeft{
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 1rem;
+    align-items: center;
+}
+
+.eventsArea .event .eventIcon{
+    width: 40px;
+    height: 40px;
+    background-color: var(--secondary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
 }

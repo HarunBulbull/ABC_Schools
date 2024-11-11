@@ -20,7 +20,7 @@
     margin-left: .5rem;
 }
 
-.findInput{
+.listPadding .findArea input{
     background: none;
     border: none;
     outline: none;
@@ -62,31 +62,9 @@
     color: var(--primary-color-6);
     text-decoration: none;
     transition: ease .3s;
-    display: flex;
-    gap: .3rem;
 }
 
 .listPadding .tableArea .tableGrid3 a:hover{
     color: var(--primary-color)
 }
 
-@media (max-width: 858px){
-    .tableHeader h3{
-        font-size: 14px;
-    }
-    .tableItem h3{
-        font-size: 13px;
-    }
-    .tableItem p, .tableItem a{
-        font-size: 11px;
-    }
-    .tableHeader p, .tableHeader a{
-        font-size: 11px;
-    }
-    .tableItem img{
-        display: none;
-    }
-    .findInput{
-        font-size: 12px;
-    }
-}

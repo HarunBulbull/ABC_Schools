@@ -82,7 +82,7 @@ function StudentDetail() {
         <div className="notesArea">
           <Flex justify="space-between" align='center'>
             <h2>Ders Notları</h2>
-            <a href="#" className='allButton'>Hepsi <CaretRightOutlined/></a>
+            <a href="/ogrenci/obiziz/dersler" className='allButton'>Hepsi <CaretRightOutlined/></a>
           </Flex>
           <a href="#" className='button'>2024-2025 1. Dönem</a>
           <a href="#" className='button'>2024-2025 2. Dönem</a>

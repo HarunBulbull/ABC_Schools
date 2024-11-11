@@ -31,6 +31,11 @@ function MainLayout({ children }) {
       path: '/ogrenci-listesi'
     },
     {
+      icon: <UnorderedListOutlined />,
+      label: 'Öğretmenler',
+      path: '/ogretmen-listesi'
+    },
+    {
       icon: <CalendarOutlined />,
       label: 'Planlamalarım',
       path: '/planlamalarim'

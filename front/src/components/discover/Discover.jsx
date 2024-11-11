@@ -157,7 +157,7 @@ function Discover() {
 
       </div>
 
-      <div className="discoverSectionSidebar" style={{width: collapsed ? "0" : "400px"}}>
+      <div className="discoverSectionSidebar" style={{width: collapsed ? "0" : "350px"}}>
         {!collapsed && window.innerWidth < 1156 && 
           <p onClick={() => setCollapsed(true)} style={{cursor: "pointer", paddingLeft: "1rem"}}><CaretRightOutlined/> Takvimim</p>
         }

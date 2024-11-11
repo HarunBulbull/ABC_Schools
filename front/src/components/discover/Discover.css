@@ -1,6 +1,6 @@
 .sectionDiscover{
     display: grid;
-    grid-template-columns: 1fr 400px;
+    grid-template-columns: 1fr 350px;
     gap: 1rem;
     padding-left: 1rem;
     width: calc(100% - 1rem);
