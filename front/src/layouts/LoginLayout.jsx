@@ -7,7 +7,6 @@ function LoginLayout() {
   const clientId = import.meta.env.VITE_K12_CLIENT_ID;
   const clientSecret = import.meta.env.VITE_K12_CLIENT_SECRET;
   const redirectUrl = import.meta.env.VITE_K12_REDIRECT_URL;
-  const [openIframe, setOpenIframe] = useState(false);
 
   return (
     <>
@@ -15,12 +14,6 @@ function LoginLayout() {
         <div className="overVideoDiv"></div>
         <video autoPlay loop muted playsInline src="https://abc.k12.tr/wp-content/uploads/2023/12/abctanitim.mp4"></video>
       </div>
-      {openIframe &&
-        <div className="iframeArea">
-          <iframe src={`${apiUrl}/GWCore.Web/connect/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUrl}&scope=openid%20profile`} frameborder="0" />
-          <button onClick={() => setOpenIframe(false)}>Kapat</button>
-        </div>
-      }
       <div className="loginFormArea">
         <h1>ABC Portal Giriş</h1>
         <div className="loginFormGrid">
