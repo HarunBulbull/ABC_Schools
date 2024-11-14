@@ -6,11 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/connect': {
-        target: 'https://api-test.k12net.com/GWCore.Web',
+      '/GWCore.Web': {
+        target: 'https://api-test.k12net.com',
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/GWCore.Web/, ''),
         secure: false,
-        rewrite: (path) => path.replace(/^\/connect/, ''),
       },
     },
   },

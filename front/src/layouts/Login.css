@@ -82,38 +82,7 @@
     padding-left: .5rem;
 }
 
-.loginFormArea .loginFormGrid .loginInputs a{
-    text-decoration: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: .5rem 0;
-    background-color: var(--secondary-color);
-    border: none;
-    outline: none;
-    cursor: pointer;
-    color: var(--broken-white);
-    border-radius: 5px;
-    font-weight: 600;
-}
-
-.iframeArea{
-    width: 80%;
-    height: 80%;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999;
-}
-
-.iframeArea iframe{
-    width: 100%;
-    height: 100%;
-}
-
-.iframeArea button{
+.loginFormArea .loginFormGrid .loginInputs button{
     text-decoration: none;
     display: flex;
     justify-content: center;
