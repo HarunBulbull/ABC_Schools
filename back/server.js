@@ -6,6 +6,7 @@ const cors = require("cors");
 const logger = require("morgan");
 const port = 5000;
 const mainRoute = require('./routes/index.js')
+const fs = require('fs');
 dotenv.config();
 
 
@@ -27,6 +28,53 @@ const corsOptions = {
   origin: '*',
   credentials: true,
 };
+
+
+async function updateToken() {
+    const url = process.env.K12_BASE_URL;
+    const clientId = process.env.K12_CLIENT_ID;
+    const clientSecret = process.env.K12_CLIENT_SECRET;
+
+    const formData = new URLSearchParams();
+    formData.append('grant_type', "client_credentials");
+    formData.append('client_id', clientId);
+    formData.append('client_secret', clientSecret);
+
+    const response = await fetch(`${url}/GWCore.Web/connect/token`, {
+        method: "POST",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: formData.toString()
+    });
+
+    const getTokenRes = await response.json();
+
+    if(response.ok){
+        fs.readFile('../currentToken.json', 'utf8', (err, data) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+        
+            let jsonData = JSON.parse(data);
+        
+            jsonData.token = getTokenRes.access_token;
+        
+            fs.writeFile('../currentToken.json', JSON.stringify(jsonData, null, 2), (err) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log('Güncel token başarıyla güncellendi. => ' + new Date());
+                }
+            });
+        });
+    }
+
+    else{
+        console.log("There is an error on getting token: " + getTokenRes.error)
+    }
+}
+updateToken();
+setInterval(updateToken, 3300000); 
 
 app.use(cors(corsOptions));
 app.use("/api", mainRoute);
