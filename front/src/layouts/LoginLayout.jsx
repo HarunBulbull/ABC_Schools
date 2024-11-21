@@ -14,7 +14,9 @@ function LoginLayout() {
     }
   }, [user])
 
-  const handleLogin = () => {window.location.href = apiUrl;}
+  const handleLogin = () => {
+    window.location.href = apiUrl;
+  }
 
   return (
     <>
