@@ -35,10 +35,6 @@ function MainLayout({ children }) {
   }, [link, user])
 
 
-  //
-  // Access code ile token elde etme
-  //
-
   useEffect(() => {
     if (code != "" && !user) {
       const fetchData = async () => {

@@ -4,19 +4,34 @@ import { useNavigate } from 'react-router-dom'
 
 function LoginLayout() {
   const apiUrl = import.meta.env.VITE_K12_GET_CODE;
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
   const nav = useNavigate();
 
   useEffect(() => {
-    if(user){
-      nav('/')
-      window.location.reload();
+    if(user){window.location.reload();}
+    else{
+      if(window.location.search.includes("code=")){
+        const code = window.location.search.split('code=')[1].split('&')[0];
+        const fetchData = async () => {
+          try {
+            const response = await fetch(`${baseUrl}/api/token/${code}`, {method: "GET"});
+            const res = await response.json();
+  
+            if(response.ok){
+              localStorage.setItem('user', JSON.stringify(res));
+              window.location.reload();
+            }
+            
+            else{alert("Verileriniz getirilirken bir hata oluştu! :(");}
+          } catch (error) {
+            console.error(error);
+          }
+        }
+        fetchData();
+      }
     }
   }, [user])
-
-  const handleLogin = () => {
-    window.location.href = apiUrl;
-  }
 
   return (
     <>
@@ -28,7 +43,7 @@ function LoginLayout() {
         <h1>ABC Portal Giriş</h1>
         <div className="loginFormGrid">
           <div className="loginInputs">
-            <button onClick={() => handleLogin()}>Giriş Yap</button>
+            <button onClick={() => window.location.href = apiUrl}>Giriş Yap</button>
           </div>
           <div className='span'></div>
           <div className="brandArea">

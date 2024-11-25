@@ -1,0 +1,393 @@
+.studentProfileGrid{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.studentProfileGrid .infoArea{
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0, .2);
+    padding: 1rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 6rem);
+    overflow-y: scroll;
+    position: relative;
+}
+
+.studentProfileGrid .infoArea .relativeArea{
+    position: relative;
+}
+
+.studentProfileGrid .infoArea .info{
+    background: none;
+    box-shadow: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 0;
+    width: 15%;
+    height: auto;
+    aspect-ratio:unset;
+    animation: ease 5s wiggle infinite;
+    filter: blur(1px);
+}
+
+.studentProfileGrid .infoArea .cross{
+    background: none;
+    box-shadow: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+    width: auto;
+    height: auto;
+    aspect-ratio:unset;
+    animation: ease 5s wiggle infinite;
+    transform: translate(-50%, -100%);
+}
+
+.studentProfileGrid .infoArea .sus{
+    background: none;
+    box-shadow: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 0;
+    opacity: .8;
+    border-radius: 0;
+    width: auto;
+    height: auto;
+    aspect-ratio:unset;
+    animation: ease 5s transform infinite;
+    filter: blur(1px);
+}
+
+.studentProfileGrid .infoArea .phone{
+    background: none;
+    box-shadow: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 0;
+    width: 50%;
+    height: auto;
+    aspect-ratio:unset;
+    animation: linear 30s rotation infinite;
+    filter: blur(1px);
+    opacity: .3;
+    animation-delay: 2s;
+    opacity: .7;
+    transform: translate(50%, 0);
+    transform-origin: right;
+}
+
+
+.studentProfileGrid .infoArea::-webkit-scrollbar {
+    width: 0px;
+}
+
+.studentProfileGrid .infoArea img{
+    width: 50px;
+    position: relative;
+}
+
+.studentProfileGrid .infoArea .active{
+    background-color: rgba(0,200,0,.5);
+    padding: .25rem 1rem;
+    color: green;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+.studentProfileGrid .infoArea span{
+    width: 100%;
+    height: 1px;
+    background-color: rgba(0,0,0, .2);
+    display: block;
+    margin: 1rem 0;
+}
+
+.studentProfileGrid .infoArea .listArea{
+    align-self: flex-start;
+    width: 100%;
+}
+
+.studentProfileGrid .infoArea .listArea ul{
+    margin-left: 1.25rem;
+}
+
+.studentProfileGrid .rightArea{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.studentProfileGrid .rightArea .rightGridArea .verticalGrid{
+    display: grid;
+    grid-template-rows: auto 1fr 1fr 1fr;
+    gap: 1rem;
+}
+
+.studentProfileGrid .rightArea .rightGridArea .verticalGrid a{
+    width: 100%;
+    height: 100%;
+    background: url(./history_img.jpg);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-size: 20px;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 10px rgba(0,0,0, .2);
+    transition: ease .3s;
+}
+
+.studentProfileGrid .rightArea .rightGridArea .verticalGrid a .buttonBlack{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.4), rgba(0,0,0,.6));
+    backdrop-filter: blur(0px);
+    transition: ease .3s;
+}
+
+.studentProfileGrid .rightArea .rightGridArea .verticalGrid a:hover{
+    scale: 1.02;
+}
+
+.studentProfileGrid .rightArea .rightGridArea .verticalGrid a:hover .buttonBlack{
+    backdrop-filter: blur(2px);
+}
+
+.studentProfileGrid .rightArea .rightGridArea{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    height: 100%;
+}
+
+.studentProfileGrid .rightArea .rightGridArea .homeworkList{
+    height: calc(100% - 2rem);
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 10px rgba(0,0,0, .2);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    position: relative;
+}
+
+.studentProfileGrid .rightArea .rightGridArea .homeworkList .homework{
+    padding: .5rem;
+    background-color: var(--broken-white);
+    border: 1px solid #ccc;
+    border-radius: .5rem;
+    cursor: pointer;
+    transition: ease .3s;
+    position: relative;
+    z-index: 1;
+    opacity: .8;
+}
+
+.studentProfileGrid .rightArea .rightGridArea .homeworkList .homework:hover{
+    scale: 1.01;
+    opacity: 1;
+}
+
+.studentProfileGrid .rightArea .rightGridArea .homeworkList .bulb{
+    background: none;
+    box-shadow: none;
+    position: absolute;
+    top: 0;
+    transform: translate(50%, -50%);
+    right: 0;
+    width: 30%;
+    aspect-ratio: 2/1;
+    object-fit: contain;
+    animation: ease 3s wiggle infinite;
+    z-index: 0;
+}
+.studentProfileGrid .rightArea .rightGridArea .homeworkList .shape{
+    background: none;
+    box-shadow: none;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 0;
+    width: auto;
+    aspect-ratio: 2/1;
+    object-fit: contain;
+    animation: ease 3s wiggle infinite;
+    z-index: 0;
+    opacity: .7;
+}
+
+.studentProfileGrid .rightArea .adArea{
+    background: url(./activity.webp);
+    background-size: cover;
+    background-position: center;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 10px rgba(0,0,0, .4);
+    position: relative;
+}
+
+.studentProfileGrid .rightArea .adArea .black{
+    width: calc(100% - 4rem);
+    height: calc(100% - 4rem);
+    background: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.35), rgba(0,0,0,.7));
+    border-radius: 1rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.studentProfileGrid .rightArea .adArea .black h2{
+    color: white;
+}
+
+.studentProfileGrid .rightArea .adArea .black img{
+    background: none;
+    height: 30px;
+    border-radius: 0;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    box-shadow: none;
+    padding: none;
+}
+
+.studentProfileGrid .rightArea .adArea .black .activity{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    color: white;
+    background-color: rgba(255,255,255,.2);
+    padding: 1rem;
+    border-radius: 1rem;
+    backdrop-filter: blur(2px);
+    user-select: none;
+    cursor: pointer;
+    text-shadow: 0px 0px 3px black;
+    transition: ease .3s;
+}
+
+.studentProfileGrid .rightArea .adArea .black .activity p{
+    opacity: 1;
+}
+
+.studentProfileGrid .rightArea .adArea .black .activity:hover{
+    scale: 1.02;
+    backdrop-filter: blur(10px);
+}
+
+.studentProfileGrid .rightArea .adArea .vector{
+    background: none;
+    box-shadow: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20%;
+    aspect-ratio: 2/1;
+    object-fit: contain;
+    transform: translate(2rem, 50%);
+    animation: ease 3s wiggle infinite;
+}
+
+.studentProfileGrid .rightArea .adArea .shape{
+    background: none;
+    box-shadow: none;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100px;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    transform: translate(-25%, -50%);
+    animation: ease 4s wiggle infinite;
+}
+
+@keyframes wiggle{
+    0%{
+        rotate: 0;
+    }
+    50%{
+        rotate: 10deg
+    }
+    100%{
+        rotate: 0;
+    }
+}
+
+@keyframes transform{
+    0%{
+        transform: none;
+        rotate: -5deg;
+    }
+    50%{
+        transform: translate(-.5rem, -.5rem);
+        rotate: 5deg
+    }
+    100%{
+        transform: none;
+        rotate: -5deg;
+    }
+}
+
+@keyframes rotation{
+    0%{
+        rotate: 0;
+    }
+    100%{
+        rotate: 360deg
+    }
+}
+
+@media (max-width: 1200px) {
+    .studentProfileGrid .infoArea .sus{
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .studentProfileGrid .infoArea .sus{
+        display: block;
+    }
+    .studentProfileGrid{
+        grid-template-columns: 1fr;
+    }
+    .studentProfileGrid .infoArea .phone{
+        width: 30%;
+    }
+}
+
+@media (max-width: 650px) {
+    .studentProfileGrid .rightArea .rightGridArea{
+        grid-template-columns: 1fr;
+    }
+    .studentProfileGrid .rightArea .rightGridArea .verticalGrid{
+        display: none;
+    }
+    .studentProfileGrid .rightArea .rightGridArea .homeworkList .bulb{
+        right:20%;
+    }
+    .studentProfileGrid .rightArea .adArea .black .activity .flexMedia{
+        flex-direction: column;
+        gap: .5rem;
+    }
+    .studentProfileGrid .rightArea .rightGridArea .homeworkList .homework .flexMedia{
+        flex-direction: column;
+    }
+    .studentProfileGrid .rightArea .adArea .black .activity p,
+    .studentProfileGrid .rightArea .rightGridArea .homeworkList .homework i{
+        font-size: 12px;
+    }
+    .studentProfileGrid .infoArea .sus{
+        display: none;
+    }
+}

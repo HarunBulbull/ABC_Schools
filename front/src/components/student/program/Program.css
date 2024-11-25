@@ -1,0 +1,48 @@
+.programPadding{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.programPadding .programGrid{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    min-width: 550px;
+}
+
+.programPadding .programGrid .programDay{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100dvh - 4rem);
+    text-align: center;
+    border-right: 1px solid #ccc;
+}
+
+.programPadding .programGrid .programDay:nth-last-child(1){
+    border: none;
+}
+
+.programPadding .programGrid .programDay b{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.programPadding .programGrid .programDay p{
+    border-top: 1px solid #ccc;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 800px) {
+    .programPadding .programGrid .programDay{
+        font-size: 10px;
+    }
+}
