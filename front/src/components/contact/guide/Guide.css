@@ -1,0 +1,184 @@
+.guideGrid{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.guideGrid .firstSection{
+    display: grid;
+    grid-template-rows: 50px 2.5fr 1fr;
+    gap: 2rem;
+    width: 100%;
+    height: calc(100dvh - 4rem);
+}
+
+.guideGrid .firstSection .findArea{
+    padding-right: 1rem;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+    border-radius: 1rem;
+}
+
+.guideGrid .firstSection .findArea input{
+    width: 100%;
+    height: 100%;
+    padding-left: 1rem;
+    background: none;
+    border: none;
+    outline: none;
+    font-size:16px;
+}
+
+.guideGrid .firstSection .recordsArea{
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.guideGrid .firstSection .recordsArea .record{
+    height: 50%;
+}
+
+.guideGrid .firstSection .recordsArea .record img,
+.guideGrid .firstSection .latestArea .latest img{
+    height: 100%;
+    width: 20%;
+    border-radius: .5rem;
+}
+
+.guideGrid .firstSection .progress{
+    width: 100%;
+    height: 5px;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.guideGrid .firstSection .progress span{
+    height: 5px;
+    background-color: var(--primary-color);
+}
+
+.guideGrid .firstSection .latestArea{
+    background-color: var(--primary-color);
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+    border-radius: 1rem;
+    padding: 1rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.guideGrid .firstSection .latestArea .circle{
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-color: var(--secondary-color);
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    z-index: 0;
+    transform: translateX(-50%);
+    filter: blur(80px);
+}
+
+.guideGrid .firstSection .latestArea .circle:nth-child(2){
+    right: 0;
+    left: auto;
+    transform: translateX(50%);
+}
+
+.guideGrid .secondSection{
+    display: grid;
+    grid-template-rows: 1fr 1fr 50px;
+    gap: 2rem;
+    height: calc(100dvh - 4rem);
+}
+
+.guideGrid .secondSection .commentsArea, .guideGrid .secondSection .studentList{
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+    border-radius: 1rem;
+}
+
+.guideGrid .secondSection .studentList{
+    overflow-y: scroll;
+    height: calc(100% - 2rem);
+}
+
+.guideGrid .secondSection .studentList::-webkit-scrollbar{
+    width: 0;
+}
+
+.guideGrid .secondSection .commentsArea .comment{
+    height: 50%;
+}
+
+.guideGrid .secondSection .commentsArea .comment img{
+    aspect-ratio: 1/1;
+    align-self: flex-start;
+}
+
+.guideGrid .secondSection .goDate{
+    width: 100%;
+    height: 50px;
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+}
+
+@media (max-width: 1500px){
+    .guideGrid{
+        grid-template-columns: 1fr;
+    }
+    .guideGrid .secondSection{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 50px;
+        height: auto;
+    }
+    .guideGrid .secondSection .goDate{
+        grid-column: 1 / 3;
+        grid-row: 2;
+    }
+}
+
+@media (max-width: 980px){
+    .guideGrid .secondSection{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 50px;
+    }
+    .guideGrid .secondSection .goDate{
+        grid-column: 1;
+        grid-row: 3;
+    }
+    .guideGrid .firstSection{
+        height: auto;
+        grid-template-rows: 50px auto auto;
+    }
+    .guideGrid .firstSection .recordsArea .record{
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+    .guideGrid .firstSection .recordsArea .record img,
+    .guideGrid .firstSection .latestArea .latest img{
+        width: 100%;
+        aspect-ratio: 16/7;
+    }
+    .guideGrid .firstSection .latestArea .latest{
+        flex-direction: column;
+    }
+}
