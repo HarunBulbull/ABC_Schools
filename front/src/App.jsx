@@ -14,6 +14,9 @@ import Notes from './components/student/notes/Notes';
 import Educations from './components/student/educations/Educations';
 import History from './components/contact/history/History';
 import Guide from './components/contact/guide/Guide';
+import StudentNotes from './components/contact/studentnotes/studentnotes';
+import Success from './components/contact/status/Success';
+import Fail from './components/contact/status/Fail';
 
 function App() {
 
@@ -32,8 +35,11 @@ function App() {
       <Route path="/ogrenci/:id" element={<StudentDetail/>} />
       <Route path="/ogrenci/:id/dersler" element={<Lessons/>} />
       <Route path="/ogretmen/:id" element={<TeacherDetail/>} />
-      <Route path="/odemeyap" element={user.profile.toLowerCase() === "contact" && <Payment/>} />
-      <Route path="/odeme-gecmisi" element={user.profile.toLowerCase() === "contact" && <History/>} />
+      <Route path="/not-goruntule/:id" element={user.profile.toLowerCase() === "studentcontact" && <StudentNotes/>} />
+      <Route path="/odemeyap/:id" element={user.profile.toLowerCase() === "studentcontact" && <Payment/>} />
+      <Route path="/odeme-gecmisi" element={user.profile.toLowerCase() === "studentcontact" && <History/>} />
+      <Route path="/odeme-basarili" element={user.profile.toLowerCase() === "studentcontact" && <Success/>} />
+      <Route path="/odeme-basarisiz" element={user.profile.toLowerCase() === "studentcontact" && <Fail/>} />
     </Routes>
   )
 }

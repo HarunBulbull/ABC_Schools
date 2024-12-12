@@ -8,7 +8,12 @@
 .notesGrid .noteTable{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    height: 100%;
+    height: calc(100% - 2rem);
+    border-radius: 1rem;
+    background-color: white;
+    padding: 1rem;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+
 }
 
 .notesGrid .noteTable b, .notesGrid .noteTable p{

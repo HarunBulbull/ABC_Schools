@@ -27,17 +27,20 @@ function ContactLayout({ children }) {
     {
       icon: <UserOutlined />,
       label: 'Profilim',
-      path: '/profil'
+      path: '/profil',
+      disabled: false
     },
     {
       icon: <GatewayOutlined />,
       label: 'Rehberlik',
-      path: '/rehberlik'
+      path: '/rehberlik',
+      disabled: true
     },
     {
       icon: <CheckCircleOutlined />,
       label: 'Ödeme Geçmişi',
-      path: '/odeme-gecmisi'
+      path: '/odeme-gecmisi',
+      disabled: true
     },
   ]
 
@@ -47,7 +50,7 @@ function ContactLayout({ children }) {
         <img src="/assets/mainlogo.png" alt="main_logo" style={collapsed ? { width: "30px" } : {}} />
         <ul>
           {tabs.map((t, k) => (
-            <li style={collapsed ? { width: "100%", padding: 0, justifyContent: "center" } : {}} key={k} onClick={() => { setActiveTab(t.path); nav(t.path) }} className={activeTab === t.path ? 'activeTab' : ''}><p>{t.icon}</p><p style={collapsed ? { display: "none" } : {}}>{t.label}</p></li>
+            <li style={collapsed ? { width: "100%", padding: 0, justifyContent: "center", opacity: t.disabled ? ".5" : "1", cursor: t.disabled ? "not-allowed" : "pointer"} : {opacity: t.disabled ? ".5" : "1", cursor: t.disabled ? "not-allowed" : "pointer"}} key={k} onClick={ () => {setActiveTab(!t.disabled && t.path); nav(!t.disabled && t.path) }} className={activeTab === t.path ? 'activeTab' : ''}><p>{t.icon}</p><p style={collapsed ? { display: "none" } : {}}>{t.label}</p></li>
           ))}
         </ul>
         <ul className='bottomPanel' style={collapsed ? { width: "50px" } : {}}>
