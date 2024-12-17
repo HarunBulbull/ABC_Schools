@@ -132,7 +132,7 @@ function Payment() {
         installment: selected,
         user: info.ID
       }
-      const res = await fetch(`${apiURL}/api/payment`, {
+      const res = await fetch(`${apiURL}/api/kuveyt`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)

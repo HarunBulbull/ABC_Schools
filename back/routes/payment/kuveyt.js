@@ -9,8 +9,8 @@ const customerId = process.env.KUVEYT_CUSTOMER_ID;
 const username = process.env.KUVEYT_USERNAME;
 const password = process.env.KUVEYT_PASSWORD;
 const base = process.env.KUVEYT_BASE_URL;
-const success = process.env.KUVEYT_SUCCESS_URL;
-const fail = process.env.KUVEYT_FAIL_URL;
+const success = process.env.SUCCESS_URL;
+const fail = process.env.FAIL_URL;
 
 function sha1Base64(data) {
     const hash = crypto.createHash('sha1');
@@ -22,11 +22,8 @@ router.post("/", async (req, res) => {
     console.log(req.body)
     const orderId = crypto.randomBytes(12).toString('hex');
     const amount = req.body.amount;
-
     const HashedPassword = sha1Base64(password);
     const HashData = sha1Base64(merchantId + orderId + amount + success + fail + username + HashedPassword);
-
-
     const data = {
         merchantOrderId: orderId,
         successUrl: success,
@@ -48,7 +45,6 @@ router.post("/", async (req, res) => {
             securityCode: req.body.cardCvv
         }
     };
-
     try {
         const response = await fetch(`${base}/KTPay/Payment`, {
             method: "POST",
