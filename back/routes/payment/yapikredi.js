@@ -134,13 +134,13 @@ router.get("/", async (req, res) => {
                     })
                     .catch(error => {
                         console.error(error);
-                        return res.status(400).json({ success: false, errCode: "-1ABC", err: error });
+                        return res.status(500).json({ success: false, errCode: "-1ABC", err: error });
                     });
             }
         })
         .catch(error => {
             console.error(error);
-            return res.status(400).json({ success: false, errCode: "-1ABC", err: error });
+            return res.status(500).json({ success: false, errCode: "-1ABC", err: error });
         });
 });
 

@@ -7,12 +7,17 @@ const getInfoRoute = require('./getInfo.js');
 const kuveytRoute = require('./payment/kuveyt.js');
 const garantiRoute = require('./payment/garanti.js');
 const ykbRoute = require('./payment/yapikredi.js');
+const qnbRoute = require('./payment/finansbank.js');
 
+// ! K12
 router.use("/token", getTokenRoute);
 router.use("/organization", getOrganizationsRoute);
 router.use("/info", getInfoRoute);
+
+// ! Bankalar
 router.use("/kuveyt", kuveytRoute);
 router.use("/garanti", garantiRoute);
 router.use("/ykb", ykbRoute);
+router.use("/qnb", qnbRoute);
 
 module.exports = router;

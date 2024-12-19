@@ -51,10 +51,14 @@ router.post("/", async (req, res) => {
             body: JSON.stringify(data)
         });
         const html = await response.text();
-        res.status(200).json({ success: true, html: html });
+        if(html.includes('"Success\":false')){
+            const error = html.split('ResponseMessage\":\"')[1].split('\",')[0];
+            res.status(400).json({ success: false, err: error });
+        }
+        else{res.status(200).json({ success: true, html: html });}
     } catch (err) { 
         console.log(err); 
-        res.status(500).json({ success: false, error: err });
+        res.status(500).json({ success: false, err: err });
     }
 });
 
