@@ -19,7 +19,6 @@ function sha1Base64(data) {
 }
 
 router.post("/", async (req, res) => {
-    console.log(req.body)
     const orderId = crypto.randomBytes(12).toString('hex');
     const amount = req.body.amount;
     const HashedPassword = sha1Base64(password);
