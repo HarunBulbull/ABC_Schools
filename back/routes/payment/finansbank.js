@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
     // ! Ücreti bankanın istediği formata dönüştürme
     const amount = req.body.amount + ".00";
 
-    const installment = req.body.installment;
+    const installment = 0;
     const hash = sha1(mbrId+orderId+amount+success+fail+'Auth'+installment+rnd+threeDPass);
     
     // ! Post edilecek form data
@@ -45,7 +45,7 @@ router.post("/", async (req, res) => {
     formData.append('PurchAmount', amount);
     formData.append('Currency', '949');
     formData.append('OrderId', orderId);
-    formData.append('InstallmentCount', 0);
+    formData.append('InstallmentCount', installment);
     formData.append('TxnType', 'Auth');
     formData.append('SecureType', '3DPay');
     formData.append('CardHolderName', req.body.cardHolder);
@@ -68,6 +68,7 @@ router.post("/", async (req, res) => {
         else{
             const error = html.split('name=\"ErrMsg\" id=\"ErrMsg\" value=\"')[1].split('\"')[0];
             res.status(400).json({ success: false, err: error });
+            console.log(error)
         }
     } catch (err) { 
         console.log(err); 

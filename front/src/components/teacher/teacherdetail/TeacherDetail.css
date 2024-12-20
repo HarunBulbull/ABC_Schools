@@ -1,0 +1,224 @@
+.detailMain{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.detailMain .profile{
+    display: grid;
+    grid-template-columns: 170px 1px 1fr 1px 1fr 30px;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+    border-radius: 1rem;
+}
+
+.detailMain .profile .gridLeft{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.detailMain .profile .gridLeft .gridLeftBottom{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.detailMain .profile .gridLeft img{
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+.detailMain .profile .gridLeft h2{
+    margin-top: 1rem;
+}
+
+.detailMain .profile .span{
+    width: 1px;
+    height: 100%;
+    display: block;
+    background-color: rgba(0,0,0,.2);
+}
+
+.detailMain .profile .generalInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.detailMain .profile .generalInfo ul{
+    margin-top: .5rem;
+    margin-left: 1.5rem;
+}
+
+.detailMain .profile .generalInfo ul ul li a{
+    text-decoration: none;
+    color: black;
+    opacity: .6;
+    transition: ease .3s;
+}
+
+.detailMain .profile .generalInfo ul ul li a:hover{
+    opacity: 1;
+}
+
+.detailMain .profile .editIcon{
+    background-color: var(--primary-color);
+    color: white;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.detailMain .notesArea{
+    width: 100%;
+    background-color: white;
+    padding: 1rem;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.detailMain .notesArea .button{
+    width: 100%;
+    height: 50px;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .5rem;
+}
+
+.allButton{
+    color: black;
+    opacity: .7;
+    transition: ease .3s;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .2rem;
+}
+
+.allButton:hover{
+    color: black;
+    opacity: 1;
+}
+
+.detailMain .notesArea .success{
+    background-color: rgba(0,200,0,.7);
+}
+
+.detailMain .notesArea .pending{
+    background-color: rgba(200,150,0,.7);
+}
+
+.detailMain .notesArea .error{
+    background-color: rgba(200,0,0,.7);
+}
+
+.mainNotes{
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+    padding: 1rem;
+}
+
+.noteGrid{
+    display: grid;
+    grid-template-columns: 1fr 30px;
+    align-items: center;
+    gap: .3rem;
+}
+
+.noteDetail{
+    color: var(--primary-color);
+    font-size: 18px;
+    scale: 1;
+    cursor: pointer;
+    justify-self: end;
+}
+
+.mainNotesButton{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+    text-decoration: none;
+    color: white;
+    border-radius: 10px;
+}
+
+@media (max-width: 1100px){
+    .detailMain .profile{
+        grid-template-columns: 1fr;
+        margin-top: 5rem;
+    }
+    .detailMain .profile .gridLeft img{
+        position: absolute;
+        width: 150px;
+        transform: translateY(-50%);
+    }
+    .detailMain .profile .gridLeft .gridLeftBottom{
+        margin-top: 75px;
+    }
+    .detailMain .profile .span{
+        width: 100%;
+        height: 1px;
+    }
+    .detailMain .profile .generalInfo{
+        align-items: center;
+    }
+    .detailMain .profile .generalInfo ul{
+        list-style: none;
+        text-align: center;
+        margin: 0;
+        margin-top: .5rem;
+    }
+    .detailMain .profile .editIcon{
+        width: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: .5rem;
+    }
+    .detailMain .profile .editIcon::after{
+        content: 'Düzenle';
+    }
+}
+
+@media (max-width: 800px){
+    .secondSection{
+        flex-direction: column;
+    }
+    .detailMain .notesArea{
+        width: calc(100% - 2rem);
+    }
+    .detailMain .notesArea h2, .mainNotes h2{
+        font-size: 18px;
+    }
+    .allButton{
+        font-size: 13px;
+    }
+    .noteGrid{
+        grid-template-columns: 1fr 13px;
+    }
+    .noteDetail{
+        font-size: 13px;
+        align-self: flex-start;
+    }
+}

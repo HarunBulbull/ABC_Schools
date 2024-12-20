@@ -6,9 +6,9 @@ const path = require("path");
 dotenv.config();
 
 const jspath = path.join(__dirname, '..', '..', '/currentToken.json');
+const url = process.env.K12_BASE_URL;
 
 router.get("/", async (req, res) => {
-    const url = process.env.K12_BASE_URL;
     fs.readFile(jspath, 'utf8', async (err, data) => {
         if (err) {
             console.error(err);
@@ -17,12 +17,12 @@ router.get("/", async (req, res) => {
         let token = JSON.parse(data).token;
         const response = await fetch(`${url}/INTCore.Web/api/Partner/Organizations`, {
             method: "GET",
-            headers: {'Authorization': `Bearer ${token}`},
+            headers: { 'Authorization': `Bearer ${token}` },
         });
         const getRes = await response.json();
-        if(response.ok){
+        if (response.ok) {
             res.status(200).json(getRes)
-            let jsonData = {token: token, id: getRes[0].id}
+            let jsonData = { token: token, id: getRes[0].id }
             fs.writeFile(jspath, JSON.stringify(jsonData, null, 2), (err) => {
                 if (err) {
                     console.error(err);
@@ -31,14 +31,13 @@ router.get("/", async (req, res) => {
                 }
             });
         }
-        else{
-            res.status(400).json({error: "There is an error: " + getRes.error})
+        else {
+            res.status(400).json({ error: "There is an error: " + getRes.error })
         }
     });
 });
 
 router.get("/schools", async (req, res) => {
-    const url = process.env.K12_BASE_URL;
     fs.readFile(jspath, 'utf8', async (err, data) => {
         if (err) {
             console.error(err);
@@ -48,14 +47,14 @@ router.get("/schools", async (req, res) => {
         let orgid = JSON.parse(data).id;
         const response = await fetch(`${url}/INTCore.Web/api/partner/organizations/${orgid}/schools`, {
             method: "GET",
-            headers: {'Authorization': `Bearer ${token}`},
+            headers: { 'Authorization': `Bearer ${token}` },
         });
         const getRes = await response.json();
-        if(response.ok){
+        if (response.ok) {
             res.status(200).json(getRes)
         }
-        else{
-            res.status(400).json({error: "There is an error: " + getRes.ErrorMessage})
+        else {
+            res.status(400).json({ error: "There is an error: " + getRes.ErrorMessage })
         }
     });
 });
@@ -64,7 +63,6 @@ router.get("/students/:skip/:take/:total", async (req, res) => {
     const skip = req.params.skip;
     const take = req.params.take;
     const total = req.params.total;
-    const url = process.env.K12_BASE_URL;
     fs.readFile(jspath, 'utf8', async (err, data) => {
         if (err) {
             console.error(err);
@@ -85,11 +83,13 @@ router.get("/students/:skip/:take/:total", async (req, res) => {
             })
         });
         const getRes = await response.json();
-        if(response.ok){
-            res.status(200).json(getRes)
+        if (response.ok) {
+            const totalstudents = await response.headers.get('totalcount');
+            const result = { totalstudents, students: getRes }
+            res.status(200).json(result)
         }
-        else{
-            res.status(400).json({error: "There is an error: " + getRes.ErrorMessage})
+        else {
+            res.status(400).json({ error: "There is an error: " + getRes.ErrorMessage })
         }
     });
 });
@@ -98,7 +98,6 @@ router.get("/teachers/:skip/:take/:total", async (req, res) => {
     const skip = req.params.skip;
     const take = req.params.take;
     const total = req.params.total;
-    const url = process.env.K12_BASE_URL;
     fs.readFile(jspath, 'utf8', async (err, data) => {
         if (err) {
             console.error(err);
@@ -119,13 +118,128 @@ router.get("/teachers/:skip/:take/:total", async (req, res) => {
             })
         });
         const getRes = await response.json();
-        if(response.ok){
-            res.status(200).json(getRes)
+        if (response.ok) {
+            const totalteachers = await response.headers.get('totalcount');
+            const result = { totalteachers, teachers: getRes }
+            res.status(200).json(result)
         }
-        else{
-            res.status(400).json({error: "There is an error: " + getRes.ErrorMessage})
+        else {
+            res.status(400).json({ error: "There is an error: " + getRes.ErrorMessage })
         }
     });
+});
+
+router.get("/allstudents", async (req, res) => {
+    try {
+        fs.readFile(jspath, 'utf8', async (err, data) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            let token = JSON.parse(data).token;
+            let orgid = JSON.parse(data).id;
+            let total = 101;
+            let index = 0;
+            const alldata = [];
+            while ((index * 100) < total) {
+                const response = await fetch(`${url}/INTCore.Web/api/partner/organizations/${orgid}/students`, {
+                    method: "POST",
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        $skip: index*100,
+                        $take: 100,
+                        $includeTotalCount: true
+                    })
+                });
+                total = await response.headers.get('totalcount');
+                const getRes = await response.json();
+                alldata.push(getRes);
+                index++;
+            }
+            const result = { total, data: alldata.flat() }
+            res.status(200).json(result)
+        });
+    }
+    catch (err) { res.status(400).json({ error: "There is an error: " + err }) }
+});
+
+router.get("/allteachers", async (req, res) => {
+    
+    try {
+        fs.readFile(jspath, 'utf8', async (err, data) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            let token = JSON.parse(data).token;
+            let orgid = JSON.parse(data).id;
+            let total = 101;
+            let index = 0;
+            const alldata = [];
+            while ((index * 100) < total) {
+                const response = await fetch(`${url}/INTCore.Web/api/partner/organizations/${orgid}/teachers`, {
+                    method: "POST",
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        $skip: index*100,
+                        $take: 100,
+                        $includeTotalCount: true
+                    })
+                });
+                total = await response.headers.get('totalcount');
+                const getRes = await response.json();
+                alldata.push(getRes);
+                index++;
+            }
+            const result = { total, data: alldata.flat() }
+            res.status(200).json(result)
+        });
+    }
+    catch (err) { res.status(400).json({ error: "There is an error: " + err }) }
+});
+
+router.get("/findteacher/:param", async (req, res) => {
+    const param = req.params.param;
+    try {
+        fs.readFile(jspath, 'utf8', async (err, data) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            let token = JSON.parse(data).token;
+            let orgid = JSON.parse(data).id;
+            let total = 101;
+            let index = 0;
+            const alldata = [];
+            while ((index * 100) < total) {
+                const response = await fetch(`${url}/INTCore.Web/api/partner/organizations/${orgid}/teachers`, {
+                    method: "POST",
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        $skip: index*100,
+                        $take: 100,
+                        $includeTotalCount: true
+                    })
+                });
+                total = await response.headers.get('totalcount');
+                const getRes = await response.json();
+                alldata.push(getRes);
+                index++;
+            }
+            const filteredData = alldata.flat().filter((el) => el.fullName.includes(param))
+            res.status(200).json(filteredData)
+        });
+    }
+    catch (err) { res.status(400).json({ error: "There is an error: " + err }) }
 });
 
 module.exports = router;
