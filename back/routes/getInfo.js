@@ -96,5 +96,4 @@ router.get("/contactStudents/:id", async (req, res) => {
     });
 });
 
-
 module.exports = router;

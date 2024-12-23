@@ -83,7 +83,7 @@ function TeacherList() {
               <Flex vertical={true}>
                 <p>{a.phoneNumbers[0]}</p>
               </Flex>
-              <a href="/ogretmen/obiziz" style={{ justifySelf: "flex-end" }}>Öğretmen İşlemleri <CaretRightOutlined /></a>
+              <a href={`/ogretmen/${a.id}`} style={{ justifySelf: "flex-end" }}>Öğretmen İşlemleri <CaretRightOutlined /></a>
             </div>
           ))}
           <div className="tableGrid3 tableHeader" style={{ borderRadius: "0 0 1rem 1rem" }}>
