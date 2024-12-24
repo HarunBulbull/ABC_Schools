@@ -1,18 +1,18 @@
-import './User.css'
+
 import React from 'react';
 import { Flex } from 'antd';
 
 function User({ info }) {
 
   return (
-      <Flex gap="middle" align='center'>
+      <Flex gap="middle" align='center' style={{fontSize: '14px'}}>
         {info.class ?
           <Flex vertical={true} >
-            <h3>{info.name}</h3>
+            <b>{info.name}</b>
             <p>{info.class}</p>
           </Flex> 
           :
-          <h2>{info.name}</h2>
+          <b>{info.name}</b>
         }
       </Flex>
   )

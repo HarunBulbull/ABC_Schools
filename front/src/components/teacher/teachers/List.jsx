@@ -1,6 +1,6 @@
-import './List.css'
+
 import React, { useEffect, useState } from 'react';
-import { Flex, Spin, Select, message, } from 'antd';
+import { Flex, Spin, Select, message, InputNumber } from 'antd';
 import { SearchOutlined, CaretRightOutlined, CaretLeftOutlined } from '@ant-design/icons';
 import User from '../user/User'
 
@@ -38,8 +38,8 @@ function TeacherList() {
   useEffect(() => { setIndex(0); }, [perpage])
 
   const handleSearch = async () => {
-    setFinder(!finder)
-    if(!finder){
+    if(text != ''){
+      setFinder(true);
       setLoading(true);
       try {
         const response = await fetch(`${baseUrl}/api/organization/findteacher/${text}`, { method: "GET" });
@@ -51,18 +51,21 @@ function TeacherList() {
       } catch (error) { console.log("Veri hatası:", error); }
       finally { setLoading(false); }
     }
-    else{fetchTeachers();}
+    else{
+      setFinder(false);
+      fetchTeachers();
+    }
   }
 
   return (
     <Spin spinning={loading}>
       <Flex gap="large" align='center' vertical={true} className='listPadding'>
         <div className="findArea">
-          <input type="text" placeholder='Öğretmen ara' value={text} onChange={(event) => setText(event.target.value.toLocaleUpperCase('tr-TR'))} />
+          <input type="text" className='findInput' placeholder='Öğretmen ara' value={text} onChange={(event) => setText(event.target.value.toLocaleUpperCase('tr-TR'))} onKeyDown={(event) => event.key === 'Enter' && handleSearch()}/>
           <SearchOutlined className='searchIcon' onClick={() => handleSearch()} />
         </div>
         <div className="tableArea">
-          <div className="tableGrid3 tableHeader">
+          <div className="tableGrid3 tableHeader" style={{gridTemplateColumns: '2fr 2fr 1fr'}}>
             <h3>Öğretmen</h3>
             <h3>Telefon</h3>
             <Select
@@ -78,7 +81,7 @@ function TeacherList() {
             />
           </div>
           {teachers.map((a, b) => (
-            <div className="tableGrid3 tableItem" key={b}>
+            <div className="tableGrid3 tableItem" key={b} style={{gridTemplateColumns: '2fr 2fr 1fr'}}>
               <User info={{ picture: '/assets/anonim.png', name: a.fullName, class: a.assignments[0].teachingAssignmentDescription }} />
               <Flex vertical={true}>
                 <p>{a.phoneNumbers[0]}</p>
@@ -86,11 +89,15 @@ function TeacherList() {
               <a href={`/ogretmen/${a.id}`} style={{ justifySelf: "flex-end" }}>Öğretmen İşlemleri <CaretRightOutlined /></a>
             </div>
           ))}
-          <div className="tableGrid3 tableHeader" style={{ borderRadius: "0 0 1rem 1rem" }}>
+          <div className="tableGrid3 tableHeader" style={{ borderRadius: "0 0 1rem 1rem", gridTemplateColumns: '1fr 1fr 1fr' }}>
             {!finder &&
             <>
               <a onClick={() => index > 0 && setIndex(index - 1)} style={{ textAlign: "start", userSelect: "none" }}><CaretLeftOutlined /> Önceki Sayfa</a>
-              <p>Sayfa {index + 1}/{pages}</p>
+              <Flex align='center' gap="middle" justify='center'>
+                  <p style={{ justifySelf: "center" }}>Sayfa</p>
+                  <InputNumber min={1} max={pages} value={index + 1} onChange={(value) => setIndex(value - 1)} />
+                  <p>/ {pages}</p>
+                </Flex>
               <a onClick={() => (pages - 1) > index && setIndex(index + 1)} style={{ justifySelf: "flex-end", userSelect: "none" }}>Sonraki Sayfa <CaretRightOutlined /></a>
             </>
             }

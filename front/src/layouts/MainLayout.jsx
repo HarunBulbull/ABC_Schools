@@ -5,7 +5,8 @@ import {
   CalendarOutlined,
   SettingOutlined,
   LogoutOutlined,
-  CaretLeftOutlined
+  CaretLeftOutlined,
+  DollarOutlined
 } from '@ant-design/icons'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -82,6 +83,16 @@ function MainLayout({ children }) {
       icon: <CalendarOutlined />,
       label: 'Planlamalarım',
       path: '/planlamalarim'
+    },
+    {
+      icon: <DollarOutlined />,
+      label: 'Ücretler',
+      path: '/ucretler'
+    },
+    {
+      icon: <UnorderedListOutlined />,
+      label: 'Bekleyen Ödemeler',
+      path: '/borclar'
     },
   ]
 

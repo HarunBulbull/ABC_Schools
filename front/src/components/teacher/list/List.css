@@ -1,6 +1,7 @@
 .listPadding{
-    width: calc(100% - 2rem);
-    padding: 1rem;
+    width: calc(100% - 4rem);
+    padding: 2rem;
+    min-height: calc(100dvh - 4rem);
 }
 
 .listPadding .findArea{
@@ -20,7 +21,7 @@
     margin-left: .5rem;
 }
 
-.findInput{
+.listPadding .findArea .findInput{
     background: none;
     border: none;
     outline: none;
@@ -35,31 +36,32 @@
     flex-direction: column;
     background-color: white;
     box-shadow: 0px 0px 10px rgba(0,0,0,.2);
-    border-radius: 1rem;
+    border-radius: 10px;
 }
 
 .listPadding .tableArea .tableGrid3{
     display: grid;
-    grid-template-columns: 2fr 2fr 1fr;
+    grid-template-columns: 2fr 2fr 2fr 2fr 1fr;
     height: 50px;
     align-items: center;
 }
 
 .listPadding .tableArea .tableHeader{
-    color: var(--primary-color);
-    background-color: var(--primary-color-1);
+    background-color: #f9f9f9;
     padding: 0 1rem;
-    border-radius: 1rem 1rem 0 0;
+    border-radius:  10px 10px 0 0;
 }
 
 .listPadding .tableArea .tableItem{
-    padding: 1rem;
-    border-top: 1px solid rgba(0,0,0,.2);
+    padding: .5rem 1rem;
+    border-top: 1px solid rgba(0,0,0,.05);
+    font-size: 14px;
 }
 
 .listPadding .tableArea .tableGrid3 a{
     text-align: end;
-    color: var(--primary-color-6);
+    opacity: 0.4;
+    color: #000;
     text-decoration: none;
     transition: ease .3s;
     display: flex;
@@ -67,7 +69,7 @@
 }
 
 .listPadding .tableArea .tableGrid3 a:hover{
-    color: var(--primary-color)
+    opacity: 1;
 }
 
 @media (max-width: 858px){
