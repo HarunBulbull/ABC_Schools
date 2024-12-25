@@ -17,7 +17,10 @@ function List() {
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${baseUrl}/api/organization/students/${index * perpage}/${perpage}/true`, { method: "GET", });
+      const response = await fetch(`${baseUrl}/api/organization/students/${index * perpage}/${perpage}/true`, { 
+        method: "GET",
+        headers: { 'x-api-key': import.meta.env.VITE_API_KEY}
+      });
       if (response.ok) {
         const data = await response.json();
         setStudents(data.students);
@@ -38,9 +41,13 @@ function List() {
       setFinder(true);
       setLoading(true);
       try {
-        const response = await fetch(`${baseUrl}/api/organization/findstudent/${text}`, { method: "GET" });
+        const response = await fetch(`${baseUrl}/api/organization/findstudent/${text}`, { 
+          method: "GET",
+          headers: { 'x-api-key': import.meta.env.VITE_API_KEY}
+         });
         if (response.ok) {
           const data = await response.json();
+          console.log(data);
           setStudents(data);
         }
         else { message.error("Veri Getirme Başarısız."); }

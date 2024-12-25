@@ -23,7 +23,10 @@ function Counts() {
             setLoading(true);
             const response = await fetch(`${apiURL}/api/counts/${counts._id}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json", },
+                headers: { 
+                    "Content-Type": "application/json",  
+                    'x-api-key': import.meta.env.VITE_API_KEY
+                },
                 body: JSON.stringify(parsedData),
             });
 
@@ -41,7 +44,10 @@ function Counts() {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${apiURL}/api/counts`);
+            const response = await fetch(`${apiURL}/api/counts`, {
+                method: "GET",
+                headers: { 'x-api-key': import.meta.env.VITE_API_KEY}
+            });
             if (response.ok) {
                 const data = await response.json();
                 setCounts(data);

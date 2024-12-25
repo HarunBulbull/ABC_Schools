@@ -42,10 +42,16 @@ function MainLayout({ children }) {
         try {
           const response = await fetch(`${baseUrl}/api/token/${code}`, {
             method: "GET",
+            headers: { 'x-api-key': import.meta.env.VITE_API_KEY}
           });
           const res = await response.json();
           if(response.ok){
-            localStorage.setItem('user', JSON.stringify(res));
+            if(res.ID == "{d90dc8a4-49ae-ef11-8147-bc97e1afd933}"){
+              localStorage.setItem('user', JSON.stringify(res));
+              window.location.reload();
+            }else{
+              alert("Profilinizin portala erişim hakkı bulunmamaktadır. https://okul.k12net.com adresine gidip hesabınızdan çıkış yapıp Obiziz tarafından size verilen erişim hakkına sahip bir profil ile giriş yapınız.");
+            }
           }else{
             nav('/login')
             window.location.reload();

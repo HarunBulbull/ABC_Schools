@@ -19,7 +19,10 @@ function TeacherList() {
   const fetchTeachers = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${baseUrl}/api/organization/teachers/${index * perpage}/${perpage}/true`, { method: "GET" });
+      const response = await fetch(`${baseUrl}/api/organization/teachers/${index * perpage}/${perpage}/true`, {
+         method: "GET",
+         headers: { 'x-api-key': import.meta.env.VITE_API_KEY}
+        });
       if (response.ok) {
         const data = await response.json();
 
@@ -42,7 +45,10 @@ function TeacherList() {
       setFinder(true);
       setLoading(true);
       try {
-        const response = await fetch(`${baseUrl}/api/organization/findteacher/${text}`, { method: "GET" });
+        const response = await fetch(`${baseUrl}/api/organization/findteacher/${text}`, { 
+          method: "GET",
+          headers: { 'x-api-key': import.meta.env.VITE_API_KEY}
+        });
         if (response.ok) {
           const data = await response.json();
           setTeachers(data);
@@ -86,7 +92,7 @@ function TeacherList() {
               <Flex vertical={true}>
                 <p>{a.phoneNumbers[0]}</p>
               </Flex>
-              <a href={`/ogretmen/${a.id}`} style={{ justifySelf: "flex-end" }}>Öğretmen İşlemleri <CaretRightOutlined /></a>
+              <a href={`#`} style={{ justifySelf: "flex-end" }}>Öğretmen İşlemleri <CaretRightOutlined /></a>
             </div>
           ))}
           <div className="tableGrid3 tableHeader" style={{ borderRadius: "0 0 1rem 1rem", gridTemplateColumns: '1fr 1fr 1fr' }}>

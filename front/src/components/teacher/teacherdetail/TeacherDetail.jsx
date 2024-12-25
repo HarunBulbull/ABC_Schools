@@ -1,4 +1,4 @@
-import './TeacherDetail.css'
+
 import React from 'react';
 import { Flex } from 'antd';
 import { EditOutlined, CaretRightOutlined, CheckCircleOutlined, ExclamationCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';

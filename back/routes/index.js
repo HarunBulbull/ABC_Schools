@@ -25,7 +25,9 @@ router.use("/qnb", qnbRoute);
 
 // ! Mongo
 const countsRoute = require('./mongo/counts.js');
+const studentRoute = require('./mongo/student.js');
 
 router.use("/counts", countsRoute);
+router.use("/student", studentRoute);
 
 module.exports = router;
