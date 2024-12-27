@@ -11,6 +11,7 @@ function StudentDetail() {
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [contact, setContact] = useState(null);
   const { id } = useParams();
 
   const fetchStudent = async () => {
@@ -22,9 +23,11 @@ function StudentDetail() {
       });
       if (response.ok) {
         let data = await response.json();
-        data.discounts = data.discounts.map((item, key) => ({ ...item, discount: Number(item.discount), key: key }));
-        data.special = data.special.map((item, key) => ({ ...item, discount: Number(item.discount), key: key }));
-        setStudent(data);
+        console.log(data);
+        data.student.discounts = data.student.discounts.map((item, key) => ({ ...item, discount: Number(item.discount), key: key }));
+        data.student.special = data.student.special.map((item, key) => ({ ...item, discount: Number(item.discount), key: key }));
+        setStudent(data.student);
+        setContact(data.contact);
       }
       else { message.error("Öğrenci bilgileri getirilemedi."); }
     }
@@ -114,11 +117,11 @@ function StudentDetail() {
               <li><p><b>Öğrenci Adı:</b> {student?.fullName}</p></li>
               <li><p><b>Sınıf:</b> {student?.enrollment.homeroom}</p></li>
               <li><p><b>Öğrenci Numarası:</b> {student?.enrollment.localId}</p></li>
-              <li><p><b>T.C. Kimlik No:</b> {student?.nationalId}</p></li>
+              <li><p><b>T.C. Kimlik No:</b> {student?.nationalID}</p></li>
               <li><p><b>Doğum Tarihi:</b> {moment(student?.birthDate).format("DD/MM/YYYY")}</p></li>
-              <li style={{ opacity: 0.3 }}><p><b>Veli Adı:</b> Çok yakında...</p></li>
-              <li style={{ opacity: 0.3 }}><p><b>Veli Telefon:</b> Çok yakında...</p></li>
-              <li style={{ opacity: 0.3 }}><p><b>Adres:</b> Çok yakında...</p></li>
+              <li><p><b>Veli Adı:</b> {contact?.fullName}</p></li>
+              <li><p><b>Veli Telefon:</b> {contact?.phoneNumbers[0]}</p></li>
+              <li><p><b>Veli E-posta:</b> {contact?.emails[0]}</p></li>
             </ul>
           </div>
           <div className="span" />

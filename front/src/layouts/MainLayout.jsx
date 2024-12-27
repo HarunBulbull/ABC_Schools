@@ -6,7 +6,8 @@ import {
   SettingOutlined,
   LogoutOutlined,
   CaretLeftOutlined,
-  DollarOutlined
+  DollarOutlined,
+  FallOutlined
 } from '@ant-design/icons'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -70,17 +71,17 @@ function MainLayout({ children }) {
   })
 
   const tabs = [
-    {
+    /*{
       icon: <CompassOutlined />,
       label: 'Keşfet',
       path: '/kesfet'
-    },
+    },*/
     {
       icon: <UnorderedListOutlined />,
       label: 'Öğrenci Listesi',
       path: '/ogrenci-listesi'
     },
-    {
+    /*{
       icon: <UnorderedListOutlined />,
       label: 'Öğretmenler',
       path: '/ogretmen-listesi'
@@ -89,17 +90,22 @@ function MainLayout({ children }) {
       icon: <CalendarOutlined />,
       label: 'Planlamalarım',
       path: '/planlamalarim'
-    },
+    },*/
     {
       icon: <DollarOutlined />,
       label: 'Ücretler',
       path: '/ucretler'
     },
     {
+      icon: <FallOutlined />,
+      label: 'İndirimler',
+      path: '/indirimler'
+    },
+    /*{
       icon: <UnorderedListOutlined />,
       label: 'Bekleyen Ödemeler',
       path: '/borclar'
-    },
+    },*/
   ]
 
   return (

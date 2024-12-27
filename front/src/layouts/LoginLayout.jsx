@@ -22,7 +22,7 @@ function LoginLayout() {
             const res = await response.json();
   
             if(response.ok){
-              if(res.ID == "{d90dc8a4-49ae-ef11-8147-bc97e1afd933}"){
+              if(res.ID == "{ce7d9103-49ae-ef11-8147-bc97e1afd933}"){
                 localStorage.setItem('user', JSON.stringify(res));
                 window.location.reload();
               }else{

@@ -7,6 +7,7 @@ const CountsSchema = mongoose.Schema({
     ortaokul: { type: Object, required: true },
     anadolu: { type: Object, required: true },
     fen: { type: Object, required: true },
+    indirimler: { type: Object, required: true },
 })
 
 

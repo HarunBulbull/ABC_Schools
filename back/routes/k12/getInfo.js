@@ -20,14 +20,21 @@ router.get("/student/:id", async (req, res) => {
     const id = req.params.id;
     try {
         const token = await getToken();
-        const response = await fetch(`${url}/INTCore.Web/api/partner/sso/students/${id}`, {
+        const studentResponse = await fetch(`${url}/INTCore.Web/api/partner/sso/students/${id}`, {
             method: "GET",
             headers: { 'Authorization': `Bearer ${token}` },
         });
-        const getRes = await response.json();
-        const dbStudent = await student.findOne({ id: getRes.id });
-        if (response.ok) {res.status(200).json({ ...getRes, ...dbStudent?._doc })}
-        else {res.status(400).json({ error: "There is an error: " + getRes.ErrorMessage })}
+        const contactResponse = await fetch(`${url}/INTCore.Web/api/Partner/SSO/ContactStudents/${id}`, {
+            method: "GET",
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const studentRes = await studentResponse.json();
+        const contactRes = await contactResponse.json();
+        const dbStudent = await student.findOne({ id: studentRes.id });
+        const studentData = { ...studentRes, ...dbStudent?._doc}
+
+        if (studentResponse.ok) {res.status(200).json({ student: studentData, contact: contactRes })}
+        else {res.status(400).json({ error: "There is an error: " + studentRes.ErrorMessage })}
     }
     catch (error) { console.log("There is an error on getting student: " + error) }
 });

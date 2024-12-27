@@ -51,7 +51,7 @@ function TeacherList() {
         });
         if (response.ok) {
           const data = await response.json();
-          setTeachers(data);
+          setTeachers(data.teachers);
         }
         else { message.error("Veri Getirme Başarısız."); }
       } catch (error) { console.log("Veri hatası:", error); }

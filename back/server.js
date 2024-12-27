@@ -76,7 +76,8 @@ updateToken();
 setInterval(updateToken, 3300000);      
 
 app.use(cors(corsOptions));
-app.use("/api", authMiddleware, mainRoute);
+//app.use("/api", authMiddleware, mainRoute);
+app.use("/api", mainRoute);
 
 app.listen(port, () => {
     connect();

@@ -234,4 +234,11 @@
         font-size: 13px;
         align-self: flex-start;
     }
+    .detailMain .notesArea .discountGrid{
+        grid-template-columns: 1fr;
+    }
+    .detailMain .notesArea .discountGrid .span{
+        width: 100%;
+        height: 1px;
+    }
 }
