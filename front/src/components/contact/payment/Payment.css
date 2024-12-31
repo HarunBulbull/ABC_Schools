@@ -326,6 +326,7 @@
 .paymentGrid .infoArea .listArea .paymentCard a{
     color: black;
     opacity: .7;
+    cursor: pointer;
 }
 
 .paymentGrid .infoArea .listArea .paymentCard span{

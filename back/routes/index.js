@@ -16,11 +16,13 @@ const kuveytRoute = require('./payment/kuveyt.js');
 const garantiRoute = require('./payment/garanti.js');
 const ykbRoute = require('./payment/yapikredi.js');
 const qnbRoute = require('./payment/finansbank.js');
+const ziraatRoute = require('./payment/ziraat.js');
 
 router.use("/kuveyt", kuveytRoute);
 router.use("/garanti", garantiRoute);
 router.use("/ykb", ykbRoute);
 router.use("/qnb", qnbRoute);
+router.use("/ziraat", ziraatRoute);
 
 
 // ! Mongo

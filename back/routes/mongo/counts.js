@@ -4,7 +4,7 @@ const count = require("../../models/Counts.js")
 
 router.get("/", async (req, res) => {
     try {
-        const counts = await count.findOne();
+        const counts = await count.find();
         res.status(200).json(counts);
 
     } catch (error) {

@@ -39,10 +39,10 @@ function Payment() {
           setInfo(data);
 
           // ! Öğrenci, velinin öğrencisi değilse sayfadan at
-          if (data.students.findIndex((el) => el.id === id) == -1) {
+          /*if (data.students.findIndex((el) => el.id === id) == -1) {
             alert("Bu öğrenci verilerine erişme yetkiniz bulunmamaktadır!");
             nav('/profil');
-          }
+          }*/
 
           // ? İndirimler
           let dc = [];
@@ -54,7 +54,7 @@ function Payment() {
         const fetchStudent = await fetch(`${apiURL}/api/info/student/${id}`, { method: "GET" });
         if (fetchStudent.ok) {
           const student = await fetchStudent.json();
-          setStudent(student);
+          setStudent(student.student);
         }
         else { message.error("Veri Getirme Başarısız."); }
       }
@@ -126,15 +126,15 @@ function Payment() {
         cardNumber: cardInfo.number,
         cardHolder: cardInfo.name,
         cardCvv: cardInfo.cvc,
-        cardExMonth: cardInfo.expiry.substring(0,2),
-        cardExYear: cardInfo.expiry.substring(2,4),
+        cardExMonth: cardInfo.expiry.substring(0, 2),
+        cardExYear: cardInfo.expiry.substring(2, 4),
         amount: calculated,
         installment: selected,
         user: info.ID
       }
       const res = await fetch(`${apiURL}/api/kuveyt`, {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       });
 
@@ -182,40 +182,37 @@ function Payment() {
                 <li><b>Rehber Öğretmen: </b>Uğur Özer</li>
               </ul>
               <span></span>
-              <h3>Ödeme Geçmişi</h3>
+              <h3>Borç Geçmişi</h3>
+              {student?.total?.education + student?.total?.food > 0 ?
+                <>
+                  <div className="paymentCard errorCard">
+                    <ExclamationCircleOutlined className='cardIcon' />
+                    <div className="paymentInfo">
+                      <h4>Öğrencinizin Ödenmemiş Borçları</h4>
+                      <span></span>
+                      <p>Eğitim: {student?.total?.education.toLocaleString('tr-TR')}₺</p>
+                      <p>Yiyecek: {student?.total?.food.toLocaleString('tr-TR')}₺</p>
+                      <span></span>
+                      <a onClick={() => setAmount(student?.total?.education + student?.total?.food)}>Hemen Öde</a>
+                    </div>
+                  </div>
+                </>
+                :
+                <div className="paymentCard successCard">
+                  <CheckCircleOutlined className='cardIcon' />
+                  <div className="paymentInfo">
+                    <h4>Ödenmemiş Borç Bulunamadı.</h4>
+                    <span></span>
+                    <p>Şu an için bu öğrenciye ait ödenmemiş borç bulunmamaktadır.</p>
+                  </div>
+                </div>
+              }
               <div className="paymentCard infoCard">
                 <InfoCircleOutlined className='cardIcon' />
                 <div className="paymentInfo">
-                  <h4>2018 - 2019 Yılı Ödemesi</h4>
-                  <p>Bekliyor</p>
-                  <p>Tutar: 100.000₺</p>
+                  <h4>Bilgilendirme</h4>
                   <span></span>
-                  <a onClick={() => { setAmount(100000); setselectedPayment({ year: "2018-2019", status: "Bekliyor", icon: <InfoCircleOutlined className="selectedIcon" /> }) }}>Hemen Öde</a>
-                </div>
-              </div>
-              <div className="paymentCard errorCard">
-                <ExclamationCircleOutlined className='cardIcon' />
-                <div className="paymentInfo">
-                  <h4>2017 - 2018 Yılı Ödemesi</h4>
-                  <p>Ödenmedi</p>
-                  <p>Tutar: 80.000₺</p>
-                  <span></span>
-                  <a onClick={() => { setAmount(80000); setselectedPayment({ year: "2017-2018", status: "Ödenmedi", icon: <ExclamationCircleOutlined className="selectedIcon" /> }) }}>Hemen Öde</a>
-                </div>
-              </div>
-              <div className="paymentCard successCard">
-                <CheckCircleOutlined className='cardIcon' />
-                <div className="paymentInfo">
-                  <h4>2016 - 2017 Yılı Ödemesi</h4>
-                  <p>Ödendi</p>
-                  <span></span>
-                  <p>Kart Numarası: **** **** **** 4039</p>
-                  <p>Toplam Tutar: 57.000₺</p>
-                  <p>Banka: Garanti BBVA</p>
-                  <p>Tarih: 09.08.2016</p>
-                  <p>Taksit: 6 Ay</p>
-                  <span></span>
-                  <a href="#">Dekont Görüntüle</a>
+                  <p>Geçmiş dönem borçlarınız en kısa sürede entegre edilecektir.</p>
                 </div>
               </div>
             </div>
@@ -230,10 +227,8 @@ function Payment() {
             {
               selectedPayment ?
                 <>
-                  {selectedPayment.icon}
+                  <ExclamationCircleOutlined className="selectedIcon" />
                   <h3>Ödeme Bilgileri</h3>
-                  <p><b>Seçilen Ödeme: </b>{selectedPayment.year}</p>
-                  <p><b>Ödeme Durumu: </b>{selectedPayment.status}</p>
                   <p><b>Ödeme Tutarı: </b>{amount.toLocaleString('tr-TR')} ₺</p>
                   {discounts.length > 0 &&
                     <>

@@ -24,16 +24,16 @@ function ContactProfile() {
         if (response.ok) {
           const data = await response.json();
           setInfo(data);
-
           // ? Her öğrencinin detaylı bilgilerini çekip kaydetme
           let studentList = [];
           for (const s of data.students) {
             const fetchStudent = await fetch(`${apiURL}/api/info/student/${s.id}`, { method: "GET" });
             if (fetchStudent.ok) {
               const student = await fetchStudent.json();
-              studentList.push(student);
+              studentList.push(student.student);
             }
           }
+          console.log(studentList);
           setStudents(studentList);
           setStudentRecovery(studentList);
         }
@@ -100,17 +100,14 @@ function ContactProfile() {
           </div>
           <div className='studentList'>
             {students.map((s, k) => (
-              <Student key={k} info={s} count={150000} />
+              <Student key={k} info={s} count={s?.total?.education + s?.total?.food} />
             ))}
           </div>
         </div>
         <div className="rightSide">
           <h3>Ödeme Geçmişi</h3>
           <div className="payment">
-            <h4>Ödeme Başlığı</h4>
-            <p><b>Öğrenci: </b>Öğrenci adı</p>
-            <p><b>Tutar: </b>0.000₺</p>
-            <a href="#">Dekont görüntüle</a>
+            <h4>Çok yakında...</h4>
           </div>
         </div>
       </div>
