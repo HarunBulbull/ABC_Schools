@@ -1,6 +1,6 @@
 import './StudentDetail.css'
 import React, { useEffect, useState } from 'react';
-import { Flex, message, Spin, Input, InputNumber, Popconfirm, Button } from 'antd';
+import { Flex, message, Alert, Space, Spin, Select, Input, InputNumber, Popconfirm, Button, Form } from 'antd';
 import { EditOutlined, CaretRightOutlined, CheckCircleOutlined, ExclamationCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import Noter from '../noter/Noter';
 import { useParams } from 'react-router-dom';
@@ -12,22 +12,40 @@ function StudentDetail() {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [contact, setContact] = useState(null);
+  const [current, setCurrent] = useState(null);
   const { id } = useParams();
-
+  const [form] = Form.useForm();
+  const [alert, setAlert] = useState(false);
   const fetchStudent = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${baseUrl}/api/info/student/${id}`, { 
-        method: "GET" ,
-        headers: { 'x-api-key': import.meta.env.VITE_API_KEY}
+      const response = await fetch(`${baseUrl}/api/info/student/${id}`, {
+        method: "GET",
+        headers: { 'x-api-key': import.meta.env.VITE_API_KEY }
       });
       if (response.ok) {
         let data = await response.json();
-        console.log(data);
-        data.student.discounts = data.student.discounts.map((item, key) => ({ ...item, discount: Number(item.discount), key: key }));
-        data.student.special = data.student.special.map((item, key) => ({ ...item, discount: Number(item.discount), key: key }));
         setStudent(data.student);
         setContact(data.contact);
+        form.setFieldsValue({
+          education: data.student.new.education,
+          food: data.student.new.food,
+          scholarship: data.student.scholarship,
+          paid: data.student.paid,
+          discounts: data.student.discounts,
+        });
+        const currentRes = await fetch(`${baseUrl}/api/counts/sinif`, {
+          method: "POST",
+          headers: {
+            'x-api-key': import.meta.env.VITE_API_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ gradeLevel: data.student.enrollment.gradeLevel, homeRoom: data.student.enrollment.homeroom })
+        });
+        if (currentRes.ok) {
+          let currentData = await currentRes.json();
+          setCurrent(currentData);
+        }
       }
       else { message.error("Öğrenci bilgileri getirilemedi."); }
     }
@@ -37,34 +55,32 @@ function StudentDetail() {
 
   useEffect(() => { fetchStudent(); }, [baseUrl, id])
 
-  const notes = [
-    {
-      name: "Mert Yılmaz",
-      main: "Kişisel Rehberlik",
-      note: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus aliquet id ligula eget elementum. Maecenas hendrerit, elit in maximus porttitor, neque urna bibendum nisl, ut pellentesque leo purus quis odio. Maecenas pharetra, nibh et mattis blandit, neque lacus dictum lorem."
-    },
-    {
-      name: "Uğur Özer",
-      main: "Gelişimsel Rehberlik",
-      note: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus aliquet id ligula eget elementum. Maecenas hendrerit, elit in maximus porttitor, neque urna bibendum nisl, ut pellentesque leo purus quis odio. Maecenas pharetra, nibh et mattis blandit, neque lacus dictum lorem."
-    },
-    {
-      name: "H. Can Azapcı",
-      main: "Eğitsel Rehberlik",
-      note: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus aliquet id ligula eget elementum. Maecenas hendrerit, elit in maximus porttitor, neque urna bibendum nisl, ut pellentesque leo purus quis odio. Maecenas pharetra, nibh et mattis blandit, neque lacus dictum lorem."
-    },
-    {
-      name: "Harun Bülbül",
-      main: "Mesleki Rehberlik",
-      note: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus aliquet id ligula eget elementum. Maecenas hendrerit, elit in maximus porttitor, neque urna bibendum nisl, ut pellentesque leo purus quis odio. Maecenas pharetra, nibh et mattis blandit, neque lacus dictum lorem."
+  const onFinish = async (values) => {
+    if (values.education > current.meb.education && !alert) {
+      return setAlert(true);
     }
-  ];
-
-  const handleDelete = (key, type) => {
-    setStudent({ ...student, [type]: student[type].filter((item) => item.key !== key) });
+    values.scholarship = values.scholarship ? values.scholarship : 0;
+    try {
+      setLoading(true);
+      const response = await fetch(`${baseUrl}/api/student/${student.id}`, {
+        method: "PUT",
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-api-key': import.meta.env.VITE_API_KEY 
+        },
+        body: JSON.stringify({...values, new: {education: values.education, food: values.food}})
+      });
+      if (response.ok) {
+        message.success("Öğrenci bilgileri başarıyla güncellendi!");
+        setAlert(false);
+      }
+      else { message.error("Bir hata oluştu."); }
+    }
+    catch (error) { console.error("Öğrenci bilgileri güncellenemedi.", error); }
+    finally { setLoading(false); }
   }
 
-  const handleSave = async () => {
+  /*const handleSave = async () => {
     const discounts = [];
     let err = 0;
     await student.discounts.map((dis) => {
@@ -97,14 +113,13 @@ function StudentDetail() {
     });
     if(response.ok){message.success("Öğrenci bilgileri başarıyla güncellendi!");}
     else{message.error("Bir hata oluştu.");}
-  }
+  }*/
 
   return (
     <Spin spinning={loading}>
       <div className="detailMain">
         <div className="profile">
           <div className="gridLeft">
-            <img src="/assets/anonim.png" />
             <div className="gridLeftBottom">
               <h2>{student?.fullName}</h2>
               <p>{student?.enrollment.homeroom}</p>
@@ -158,114 +173,101 @@ function StudentDetail() {
 
 
         <Flex gap="large" className='secondSection'>
-          <div className="notesArea">
-            <h2>İndirimler</h2>
-            <div className="discountGrid">
-              <Flex vertical={true} gap="middle">
-                <h4>Normal İndirimler</h4>
-                {student?.discounts?.map((discount, index) => (
-                  <Flex key={index} gap="small">
-                    <Input
-                      style={{ width: "100%" }}
-                      placeholder='İndirim Adı'
-                      value={discount.name}
-                      onChange={(e) => setStudent({ ...student, discounts: student.discounts.map((item, key) => key === index ? { ...item, name: e.target.value } : item) })}
-                    />
-                    <Flex gap="small">
-                      <InputNumber
-                        min={1}
-                        max={100}
-                        style={{ width: "100%" }}
-                        placeholder='İndirim Miktarı'
-                        value={discount.discount}
-                        onChange={(e) => setStudent({ ...student, discounts: student.discounts.map((item, key) => key === index ? { ...item, discount: e } : item) })}
-                      />
-                      <Popconfirm
-                        title="İndirimi Sil"
-                        description="İndirim silinecektir. Emin misiniz?"
-                        okText="Sil"
-                        cancelText="Vazgeç"
-                        onConfirm={() => handleDelete(discount.key, "discounts")}
-                      >
-                        <Button type="primary" danger>Sil</Button>
-                      </Popconfirm>
-                    </Flex>
-                  </Flex>
-                ))}
-                <Button
-                  type="primary"
-                  onClick={() => setStudent({ ...student, discounts: [...student.discounts, { name: "", discount: 1, key: student.discounts.length }] })}
-                >
-                  İndirim Ekle
-                </Button>
+          <Form
+            form={form}
+            name="basic"
+            layout="vertical"
+            autoComplete="off"
+            onFinish={onFinish}
+            className="studentDetailForm"
+            style={{ width: "100%" }}
+          >
+            <h2 style={{ marginBottom: "1rem" }}>Öğrenci Ücret Bilgileri</h2>
+            <Flex gap="middle" className='studentDetailFormFirstFlex' align="end">
+              <Flex gap="middle" className='studentDetailFormSecondFlex' style={{ width: "100%" }}>
+                <Flex vertical={true} style={{ width: "100%" }}>
+                  <i>Önceki dönem ücreti: {student?.old?.education.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</i>
+                  <Form.Item
+                    label="Eğitim Baz Ücreti"
+                    name="education"
+                    rules={[{ required: true, message: 'Lütfen eğitim baz ücretini giriniz.' }]}
+                    style={{ width: "100%" }}
+                  >
+                    <InputNumber style={{ width: "100%" }} min={0} />
+                  </Form.Item>
+                </Flex>
+                <Flex vertical={true} style={{ width: "100%" }}>
+                  <i>Önceki dönem ücreti: {student?.old?.food.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</i>
+                  <Form.Item
+                    label="Yemek Baz Ücreti"
+                    name="food"
+                    rules={[{ required: true, message: 'Lütfen yemek baz ücretini giriniz.' }]}
+                    style={{ width: "100%" }}
+                  >
+                    <InputNumber style={{ width: "100%" }} min={0} />
+                  </Form.Item>
+                </Flex>
               </Flex>
-              <div className="span"></div>
-              <Flex vertical={true} gap="middle">
-                <h4>Gizli İndirimler</h4>
-                {student?.special?.map((discount, index) => (
-                  <Flex key={index} gap="small">
-                    <Input
-                      style={{ width: "100%" }}
-                      placeholder='İndirim Adı'
-                      value={discount.name}
-                      onChange={(e) => setStudent({ ...student, special: student.special.map((item, key) => key === index ? { ...item, name: e.target.value } : item) })}
-                    />
-                    <Flex gap="small">
-                      <InputNumber
-                        min={1}
-                        max={100}
-                        style={{ width: "100%" }}
-                        placeholder='İndirim Miktarı'
-                        value={discount.discount}
-                        onChange={(e) => setStudent({ ...student, special: student.special.map((item, key) => key === index ? { ...item, discount: e } : item) })}
-                      />
-                      <Popconfirm
-                        title="İndirimi Sil"
-                        description="İndirim silinecektir. Emin misiniz?"
-                        okText="Sil"
-                        cancelText="Vazgeç"
-                        onConfirm={() => handleDelete(discount.key, "special")}
-                      >
-                        <Button type="primary" danger>Sil</Button>
-                      </Popconfirm>
-                    </Flex>
-                  </Flex>
-                ))}
-                <Button
-                  type="primary"
-                  onClick={() => setStudent({ ...student, special: [...student.special, { name: "", discount: 1, key: student.special.length }] })}
+              <Flex gap="middle" style={{ width: "100%" }}>
+                <Form.Item
+                  label="Burs"
+                  name="scholarship"
+                  style={{ width: "100%" }}
                 >
-                  İndirim Ekle
-                </Button>
+                  <InputNumber style={{ width: "100%" }} min={0} max={100} />
+                </Form.Item>
+                <Form.Item
+                  label="Ödenen Ücret"
+                  name="paid"
+                  rules={[{ required: true, message: 'Lütfen ödenen ücreti giriniz.' }]}
+                  style={{ width: "100%" }}
+                >
+                  <InputNumber style={{ width: "100%" }} min={0} max={student?.new?.education + student?.new?.food} />
+                </Form.Item>
               </Flex>
-            </div>
-            <Button type="primary" onClick={() => handleSave()}>Kaydet</Button>
-          </div>
-          <div className="notesArea">
-            <Flex justify="space-between" align='center'>
-              <h2>Ödeme Geçmişi</h2>
-              <a href="#" className='allButton'>Hepsi <CaretRightOutlined /></a>
             </Flex>
-            <a href="#" className='button success'><CheckCircleOutlined />&nbsp;&nbsp;2024-2025 1. Dönem</a>
-            <a href="#" className='button pending'><ClockCircleOutlined />&nbsp;&nbsp;2024-2025 2. Dönem</a>
-            <a href="#" className='button error'><ExclamationCircleOutlined />&nbsp;&nbsp;2024-2025 2. Dönem</a>
-          </div>
+            <Form.Item>
+              <Form.Item
+                label="İndirim Kalemleri"
+                name="discounts"
+                style={{ width: "100%" }}
+              >
+                <Select
+                  mode="multiple"
+                  options={[
+                    { label: "ÖĞRETMEN", value: "ÖĞRETMEN" },
+                    { label: "KENDİ ÖĞRENCİMİZ", value: "KENDİ ÖĞRENCİMİZ" },
+                    { label: "ŞEHİT", value: "ŞEHİT" },
+                    { label: "GAZİ", value: "GAZİ" },
+                    { label: "PEŞİN", value: "PEŞİN" },
+                    { label: "TEK", value: "TEK" },
+                    { label: "ERKEN", value: "ERKEN" },
+                    { label: "YÖNETİM", value: "YÖNETİM" },
+                    { label: "PERSONEL", value: "PERSONEL" },
+                    { label: "GEÇİŞ", value: "GEÇİŞ" }
+                  ]}
+                />
+              </Form.Item>
+            </Form.Item>
+            {alert && <Alert
+              message="Dikkat"
+              description="Girmiş olduğunuz ücretler, MEB'e bildirilen baz ücretlerinden daha yüksek. Devam edilsin mi?"
+              type="warning"
+              style={{ marginBottom: "1rem" }}
+              action={
+                <Space direction="vertical">
+                  <Button size="small" type="primary" htmlType="submit">
+                    Evet
+                  </Button>
+                  <Button size="small" danger ghost onClick={() => setAlert(false)}>
+                    Hayır
+                  </Button>
+                </Space>
+              }
+            />}
+            <Button disabled={alert} type="primary" htmlType="submit" style={{ width: "100%" }}>Kaydet</Button>
+          </Form>
         </Flex>
-        <div className="mainNotes">
-          <Flex align='center' justify='space-between'>
-            <h2>Rehberlik Notları</h2>
-            <a href="#" className='allButton'>Hepsi <CaretRightOutlined /></a>
-          </Flex>
-          <Flex vertical={true} gap="middle" style={{ marginTop: "1rem" }}>
-            {notes.map((n, k) => (
-              <div className="noteGrid">
-                <Noter key={k} info={n} />
-                <CaretRightOutlined className='noteDetail' />
-              </div>
-            ))}
-            <a href="#" className='mainNotesButton'>Yeni Not Ekle</a>
-          </Flex>
-        </div>
       </div>
     </Spin>
   )

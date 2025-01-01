@@ -16,59 +16,21 @@ async function getData() {
     catch (error) { console.log("There is an error on getting token: " + error) }
 }
 
-router.get("/asd", async (req, res) => {
-    fs.readFile('./yeni.json', 'utf8', async (err, d) => {
+/*router.get("/asd", async (req, res) => {
+
+    fs.readFile('./guncel.json', 'utf8', async (err, d) => {
         if (err) {
             console.error(err);
             return;
         }
-        let token = JSON.parse(d);
-        token.forEach(element => {
-            element.old = { education: Number(element.education), food: Number(element.food) }
-            element.new = { education: 0, food: 0 }
-            element.scholarship = 0
-            if (element.discounts.length > 0) {
-                if (element.discounts.includes("BUR")) {
-                    element.discounts.split("+").map(discount => {
-                        if (discount.includes("BUR")) {
-                            element.scholarship = Number(discount.replace("%", "").substring(0, discount.length - 4));
-                        }
-                    });
-                }
-                element.discounts = element.discounts.split("+")
-                    .map(discount => {
-                        if (!discount.includes("BUR")) {
-                            let name = discount.replace("%", "").substring(discount.length - 4, discount.length);
-                            if (name === "ÖĞR") {return "ÖĞRETMEN"}
-                            //if (name === "KRD") {return "KARDEŞ"}
-                            if (name === "KEN") {return "KENDİ ÖĞRENCİMİZ"}
-                            if (name === "ŞEH") {return "ŞEHİT"}
-                            if (name === "GZİ") {return "GAZİ"}
-                            if (name === "PEŞ") {return "PEŞİN"}
-                            if (name === "TEK") {return "TEK"}
-                            if (name === "ERK") {return "ERKEN"}
-                            if (name === "YÖN") {return "YÖNETİM"}
-                            if (name === "PER") {return "PERSONEL"}
-                            if (name === "GEÇ") {return "GEÇİŞ"}
-                        }
-                        return null;
-                    })
-                    .filter(discount => discount !== null);
-            } else {
-                element.discounts = []
+        let flatted = JSON.parse(d);
+
+        const flat = flatted.map(item => {
+            return {
+                ...item,
+                health: {illnesses: [], medicines: [], report: ""}
             }
         });
-        
-        const flat = token.map((element) => ({
-            tc: element.tc,
-            old: element.old,
-            new: element.new,
-            discounts: element.discounts,
-            scholarship: element.scholarship,
-            health: { illnesses: [], medicines: [], report: "" },
-            paid: 0
-        }));
-
 
         const data = await getData();
         let total = 101;
@@ -93,27 +55,82 @@ router.get("/asd", async (req, res) => {
             index++;
         }
         const flatData = alldata.flat();
-        
+
         const mergedData = flat.map(flatItem => {
-            const matchingK12Data = flatData.find(k12Item => 
+            const matchingK12Data = flatData.find(k12Item =>
                 k12Item.nationalID === flatItem.tc
             );
-            
+
             return {
                 ...flatItem,
                 id: matchingK12Data ? matchingK12Data.id : null
             };
         });
 
-        /*const tcs = [];
-        mergedData.filter(item => {
-            if (!item.id) {
-                tcs.push(item.tc);
-            }
-        });*/
-        const filtered = mergedData.filter(item => item.id !== null);
-        res.json(filtered);
+        const tcdata = mergedData.filter(item => item.id === null);
+        res.json(mergedData);
     });
+});*/
+
+router.get("/missDatas", async (req, res) => {
+    try {
+        const mongoStudents = await students.find().lean();
+        const mongoStudentsNoId = await students.find({ id: null }).lean();
+        const data = await getData();
+        let total = 101;
+        let index = 0;
+        const alldata = [];
+
+        while ((index * 100) < total) {
+            const response = await fetch(`${url}/INTCore.Web/api/partner/organizations/${data.id}/students`, {
+                method: "POST",
+                headers: {
+                    'Authorization': `Bearer ${data.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    $skip: index * 100,
+                    $take: 100,
+                    $includeTotalCount: true
+                })
+            });
+            total = await response.headers.get('totalcount');
+            const getRes = await response.json();
+            alldata.push(getRes);
+            index++;
+        }
+        const flatData = alldata.flat();
+
+        const nok12 = [];
+        const ok12 = [];
+
+        await Promise.all(mongoStudentsNoId.map(async student => {
+            const ind = flatData.findIndex(k12Item => k12Item.nationalID === student.tc);
+            if (ind === -1) {
+                nok12.push(student);
+            } else {
+                const update = await students.findByIdAndUpdate(student._id, { id: flatData[ind].id }, { new: true, lean: true });
+                ok12.push(update);
+            }
+        }));
+
+        const noData = [];
+        flatData.map(flatItem => {
+            const ind = mongoStudents.findIndex(k12Item => k12Item.id === flatItem.id);
+            if (ind === -1) {
+                const ind2 = ok12.findIndex(k12Item => k12Item.id === flatItem.id);
+                if (ind2 === -1) {
+                    noData.push(flatItem);
+                }
+            }
+        });
+
+        res.status(200).json({ nok12, ok12, noData });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Server Error." });
+    }
 });
 
 router.get("/", async (req, res) => {
@@ -178,65 +195,43 @@ router.get("/schools", async (req, res) => {
     catch (error) { console.log("There is an error on getting schools: " + error) }
 });
 
-router.get("/students/:skip/:take/:total", async (req, res) => {
+router.get("/students/:skip/:take", async (req, res) => {
     const skip = req.params.skip;
     const take = req.params.take;
-    const total = req.params.total;
     try {
         const data = await getData();
-        const response = await fetch(`${url}/INTCore.Web/api/partner/organizations/${data.id}/students`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${data.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                $skip: skip,
-                $take: take,
-                $includeTotalCount: total,
-                $orderby: "StudentPersonal.Base.Name.FullName",
-            })
-        });
-        const getRes = await response.json();
-
-        if (response.ok) {
-            const studentIds = getRes.map(student => student.id);
-            const matchingStudents = await students.find({
-                id: { $in: studentIds }
-            });
-
-            const contactPromises = studentIds.map(id =>
-                fetch(`${url}/INTCore.Web/api/Partner/SSO/ContactStudents/${id}`, {
+        const total = await students.countDocuments();
+        const mongoStudents = await students.find().lean()
+            .sort({ name: 1 })
+            .skip(skip)
+            .limit(take);
+        const promises = mongoStudents.map(async student => {
+            try {
+                const studentDataRes = await fetch(`${url}/INTCore.Web/api/partner/sso/students/${student.id}`, {
                     method: "GET",
                     headers: { 'Authorization': `Bearer ${data.token}` },
-                })
-                    .then(res => res.json())
-                    .catch(err => {
-                        console.log(`Contact fetch error for student ${id}:`, err);
-                        return null;
-                    })
-            );
+                });
+                const studentData = await studentDataRes.json();
 
-            const contactResults = await Promise.all(contactPromises);
+                const contactDataRes = await fetch(`${url}/INTCore.Web/api/Partner/SSO/ContactStudents/${student.id}`, {
+                    method: "GET",
+                    headers: { 'Authorization': `Bearer ${data.token}` },
+                });
+                const contactData = await contactDataRes.json();
 
-            const mergedStudents = getRes.map((k12Student, index) => {
-                const dbStudent = matchingStudents.find(s => s.id === k12Student.id);
-                const contactData = contactResults[index];
-
-                return {
-                    studentData: {
-                        ...k12Student,
-                        ...dbStudent?._doc
-                    },
-                    contactData: contactData
+                return { 
+                    studentData: { ...studentData, ...student },
+                    contactData 
                 };
-            });
+            } catch (error) {
+                console.log(`Error fetching data for student ${student.id}:`, error);
+                return null;
+            }
+        });
 
-            const totalstudents = await response.headers.get('totalcount');
-            const result = { totalstudents, students: mergedStudents }
-            res.status(200).json(result);
-        }
-        else { res.status(400).json({ error: "There is an error: " + getRes.ErrorMessage }) }
+        const results = await Promise.all(promises);
+        const filteredResults = results.filter(result => result !== null);
+        return res.status(200).json({total, students: filteredResults});
     }
     catch (error) { res.status(500).json({ error: "Server error: " + error }); }
 });
@@ -360,62 +355,85 @@ router.get("/findteacher/:param", async (req, res) => {
     catch (error) { res.status(500).json({ error: "Server error: " + error }); }
 });
 
-router.get("/findstudent/:param", async (req, res) => {
+router.get("/findstudent/:param/:skip/:take", async (req, res) => {
     const param = req.params.param;
+    const skip = req.params.skip;
+    const take = req.params.take;
     try {
         const data = await getData();
-        const response = await fetch(`${url}/INTCore.Web/api/partner/organizations/${data.id}/students`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${data.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                $includeTotalCount: true,
-                $orderby: "StudentPersonal.Base.Name.FullName",
-                $where: `StudentPersonal.Base.Name.FullName == "${param}"`
-            })
+        const total = await students.countDocuments({
+            $or: [
+                { "name": { $regex: param, $options: "i" } },
+                { "tc": { $regex: param, $options: "i" } }
+            ]
         });
-        const getRes = await response.json();
-        if (response.ok) {
-            const studentIds = getRes.map(student => student.id);
-            const matchingStudents = await students.find({
-                id: { $in: studentIds }
-            });
-            const contactPromises = studentIds.map(id =>
-                fetch(`${url}/INTCore.Web/api/Partner/SSO/ContactStudents/${id}`, {
+        const mongoStudents = await students.find({
+            $or: [
+                { "name": { $regex: param, $options: "i" } },
+                { "tc": { $regex: param, $options: "i" } }
+            ]
+        }).lean().sort({name: 1}).skip(skip).limit(take);
+        console.log(mongoStudents);
+        const promises = mongoStudents.map(async student => {
+            try {
+                const studentDataRes = await fetch(`${url}/INTCore.Web/api/partner/sso/students/${student.id}`, {
                     method: "GET",
                     headers: { 'Authorization': `Bearer ${data.token}` },
-                })
-                    .then(res => res.json())
-                    .catch(err => {
-                        console.log(`Contact fetch error for student ${id}:`, err);
-                        return null;
-                    })
-            );
+                });
+                const studentData = await studentDataRes.json();
 
-            const contactResults = await Promise.all(contactPromises);
+                const contactDataRes = await fetch(`${url}/INTCore.Web/api/Partner/SSO/ContactStudents/${student.id}`, {
+                    method: "GET",
+                    headers: { 'Authorization': `Bearer ${data.token}` },
+                });
+                const contactData = await contactDataRes.json();
 
-            const mergedStudents = getRes.map((k12Student, index) => {
-                const dbStudent = matchingStudents.find(s => s.id === k12Student.id);
-                const contactData = contactResults[index];
-
-                return {
-                    studentData: {
-                        ...k12Student,
-                        ...dbStudent?._doc
-                    },
-                    contactData: contactData
+                return { 
+                    studentData: { ...studentData, ...student },
+                    contactData 
                 };
-            });
+            } catch (error) {
+                console.log(`Error fetching data for student ${student.id}:`, error);
+                return null;
+            }
+        });
 
-            const totalstudents = await response.headers.get('totalcount');
-            const result = { totalstudents, students: mergedStudents }
-            res.status(200).json(result);
-        }
-        else { res.status(400).json({ error: "There is an error: " + getRes.ErrorMessage }) }
+        const results = await Promise.all(promises);
+        const filteredResults = results.filter(result => result !== null);
+        return res.status(200).json({total: total, students: filteredResults});
     }
     catch (error) { res.status(500).json({ error: "Server error: " + error }); }
+});
+
+router.delete("/deletestudent/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const deletedProduct = await students.findByIdAndDelete(id);
+
+        if (!deletedProduct) {
+            return res.status(404).json({ error: "Öğrenci bulunamadı." });
+        }
+
+        res.status(200).json(deletedProduct);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Server Error." });
+    }
+});
+
+router.post("/createstudent", async (req, res) => {
+    try {
+        const data = req.body;
+        const newStudent = new students(data);
+        await newStudent.save();
+        res.status(200).json(newStudent);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Server Error." });
+    }
 });
 
 module.exports = router;

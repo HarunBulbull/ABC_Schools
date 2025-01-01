@@ -8,7 +8,11 @@ const StudentsSchema = mongoose.Schema({
     paid: { type: Number, default: 0 },
     health: { type: Object, default: {illnesses: [], medicines: [], report: ''} },
     discounts: {type: Array, default: []},
-    scholarship: {type: Number, default: 0}
+    scholarship: {type: Number, default: 0},
+    tc: {type: String, default: ""},
+    name: {type: String, default: ""},
+    class: {type: String, default: ""},
+    no: {type: String, default: ""},
 })
 
 

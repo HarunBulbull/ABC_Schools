@@ -19,6 +19,7 @@ import Success from './components/contact/status/Success';
 import Fail from './components/contact/status/Fail';
 import Counts from './components/teacher/counts/counts';
 import DebtList from './components/teacher/debts/List';
+import Datas from './components/teacher/datas/Datas';
 function App() {
 
   const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
@@ -38,6 +39,7 @@ function App() {
       <Route path="/ogretmen/:id" element={<TeacherDetail/>} />
       <Route path="/ucretler" element={<Counts/>} />
       <Route path="/borclar" element={<DebtList/>} />
+      <Route path="/veriler" element={<Datas/>} />
       <Route path="/not-goruntule/:id" element={user.profile.toLowerCase() === "studentcontact" && <StudentNotes/>} />
       <Route path="/odemeyap/:id" element={user.profile.toLowerCase() === "studentcontact" && <Payment/>} />
       <Route path="/odeme-gecmisi" element={user.profile.toLowerCase() === "studentcontact" && <History/>} />

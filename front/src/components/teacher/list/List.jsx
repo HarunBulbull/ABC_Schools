@@ -12,19 +12,21 @@ function List() {
   const [perpage, setPerpage] = useState(10);
   const [count, setCount] = useState(0);
   const [text, setText] = useState('');
+  const [search, setSearch] = useState(false);
   const navigate = useNavigate();
 
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${baseUrl}/api/organization/students/${index * perpage}/${perpage}/true`, {
+      const response = await fetch(`${baseUrl}/api/organization/students/${index * perpage}/${perpage}`, {
         method: "GET",
         headers: { 'x-api-key': import.meta.env.VITE_API_KEY }
       });
       if (response.ok) {
         const data = await response.json();
+        console.log(data)
         setStudents(data.students);
-        setCount(data.totalstudents)
+        setCount(data.total)
       }
       else { message.error("Veri Getirme Başarısız."); }
     }
@@ -32,26 +34,30 @@ function List() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchStudents(); }, [baseUrl, perpage, index])
+  useEffect(() => { if(!search){fetchStudents();} else {handleSearch();} }, [baseUrl, perpage, index])
 
   const handleSearch = async () => {
     if (text != "") {
+      setIndex(0);
+      setPerpage(10);
+      setSearch(true);
       setLoading(true);
       try {
-        const response = await fetch(`${baseUrl}/api/organization/findstudent/${text}`, {
+        const response = await fetch(`${baseUrl}/api/organization/findstudent/${text}/${index * perpage}/${perpage}`, {
           method: "GET",
           headers: { 'x-api-key': import.meta.env.VITE_API_KEY }
         });
         if (response.ok) {
           const data = await response.json();
           setStudents(data.students);
-          setCount(data.totalstudents)
+          setCount(data.total)
         }
         else { message.error("Veri Getirme Başarısız."); }
       } catch (error) { console.log("Veri hatası:", error); }
       finally { setLoading(false); }
     }
     else {
+      setSearch(false);
       fetchStudents();
     }
   }
@@ -77,19 +83,22 @@ function List() {
       </Flex>
     },
     {
-      title: 'Baz Ücretler',
+      title: 'Önceki Dönem',
       dataIndex: 'studentData',
       key: 'studentData',
       render: (studentData) => <Flex vertical={true}>
-        <p>Eğitim: {studentData.total.education}</p>
-        <p>Yemek: {studentData.total.food}</p>
+        <p><b>Eğitim:&nbsp;</b>{studentData.old.education.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</p>
+        <p><b>Yemek:&nbsp;</b>{studentData.old.food.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</p>
       </Flex>
     },
     {
-      title: 'Ödenmeyen Borç',
+      title: 'Sonraki Dönem',
       dataIndex: 'studentData',
       key: 'studentData',
-      render: (studentData) => <p style={(studentData.total.education + studentData.total.food) > 0 ? { color: 'red' } : { color: 'green' }}>{(studentData.total.education + studentData.total.food).toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</p>
+      render: (studentData) => <Flex vertical={true}>
+        <p><b>Eğitim:&nbsp;</b>{studentData.new.education.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</p>
+        <p><b>Yemek:&nbsp;</b>{studentData.new.food.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</p>
+      </Flex>
     },
     {
       title: 'Detaylar',

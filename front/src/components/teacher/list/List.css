@@ -4,7 +4,7 @@
     min-height: calc(100dvh - 4rem);
 }
 
-.listPadding .findArea{
+.findArea{
     width: 100%;
     background-color: white;
     box-shadow: 0px 0px 10px rgba(0,0,0,.2);
@@ -15,13 +15,13 @@
     padding-right: .5rem;
 }
 
-.listPadding .findArea .searchIcon{
+.findArea .searchIcon{
     width: 20px;
     font-size: 20px;
     margin-left: .5rem;
 }
 
-.listPadding .findArea .findInput{
+.findArea .findInput{
     background: none;
     border: none;
     outline: none;

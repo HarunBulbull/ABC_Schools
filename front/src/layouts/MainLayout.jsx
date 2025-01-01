@@ -7,7 +7,8 @@ import {
   LogoutOutlined,
   CaretLeftOutlined,
   DollarOutlined,
-  FallOutlined
+  FallOutlined,
+  DatabaseOutlined
 } from '@ant-design/icons'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -97,9 +98,9 @@ function MainLayout({ children }) {
       path: '/ucretler'
     },
     {
-      icon: <FallOutlined />,
-      label: 'İndirimler',
-      path: '/indirimler'
+      icon: <DatabaseOutlined />,
+      label: 'Veriler',
+      path: '/veriler'
     },
     /*{
       icon: <UnorderedListOutlined />,
