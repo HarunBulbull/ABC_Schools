@@ -13,6 +13,7 @@ const StudentsSchema = mongoose.Schema({
     name: {type: String, default: ""},
     class: {type: String, default: ""},
     no: {type: String, default: ""},
+    olddiscounts: {type: Array, default: []},
 })
 
 

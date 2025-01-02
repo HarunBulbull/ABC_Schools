@@ -1,6 +1,6 @@
 import './List.css'
 import React, { useEffect, useState } from 'react';
-import { Flex, message, Table, Button } from 'antd';
+import { Flex, message, Table, Button, Popconfirm } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,7 +24,6 @@ function List() {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
         setStudents(data.students);
         setCount(data.total)
       }
@@ -34,12 +33,10 @@ function List() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { if(!search){fetchStudents();} else {handleSearch();} }, [baseUrl, perpage, index])
+  useEffect(() => { if (!search) { fetchStudents(); } else { handleSearch(); } }, [baseUrl, perpage, index])
 
   const handleSearch = async () => {
     if (text != "") {
-      setIndex(0);
-      setPerpage(10);
       setSearch(true);
       setLoading(true);
       try {
@@ -60,6 +57,28 @@ function List() {
       setSearch(false);
       fetchStudents();
     }
+  }
+
+  const handleDelete = async (id) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${baseUrl}/api/organization/deletestudent/${id}`, {
+        method: "DELETE",
+        headers: { 'x-api-key': import.meta.env.VITE_API_KEY }
+      });
+      if (response.ok) {
+        message.success("Veri silindi.");
+        if(search){
+          handleSearch();
+        }
+        else{
+          fetchStudents();
+        }
+      }
+      else { message.error("Veri silme başarısız."); }
+    }
+    catch (error) { console.log("Veri hatası:", error); }
+    finally { setLoading(false); }
   }
 
   const Columns = [
@@ -101,41 +120,54 @@ function List() {
       </Flex>
     },
     {
-      title: 'Detaylar',
+      title: 'İşlemler',
       dataIndex: 'studentData',
       key: 'studentData',
       width: 1,
-      render: (studentData) => <Button type="primary" onClick={() => navigate(`/ogrenci/${studentData.id}`)}>Detaylar</Button>
+      render: (studentData) => (
+        <Flex gap="small">
+          <Popconfirm
+            title="Öğrenciyi Sil"
+            description="Öğrenciyi silinecektir. Emin misiniz?"
+            okText="Sil"
+            cancelText="Vazgeç"
+            onConfirm={() => handleDelete(studentData._id)}
+          >
+            <Button type="primary" danger>Sil</Button>
+          </Popconfirm>
+          <Button type="primary" onClick={() => navigate(`/ogrenci/${studentData.id}`)}>Detaylar</Button>
+        </Flex>
+      )
     },
   ];
 
   return (
     <Flex gap="large" align='center' vertical={true} className='listPadding'>
       <div className="findArea">
-          <input type="text" className='findInput' placeholder='Öğrenci ara' value={text} onChange={(event) => setText(event.target.value.toLocaleUpperCase('tr-TR'))} onKeyDown={(event) => event.key === 'Enter' && handleSearch()}/>
-          <SearchOutlined className='searchIcon' onClick={() => handleSearch()} />
-        </div>
-        <Table
-          pagination={{
-            pageSize: perpage,
-            total: count,
-            showTotal: (total) => `${total} kayıt bulundu.`,
-            onChange: (page) => setIndex(page - 1),
-            pageSizeOptions: [10, 20, 50, 100],
-            showSizeChanger: true,
-            onShowSizeChange: (current, size) => {
-              setPerpage(size);
-              setIndex(0);
-            }
-          }}
-          dataSource={students}
-          columns={Columns}
-          rowKey={(record) => record._id}
-          loading={loading}
-          scroll={{ x: 400 }}
-          style={{width: '100%'}}
-          size="small"
-        />
+        <input type="text" className='findInput' placeholder='Öğrenci ara' value={text} onChange={(event) => setText(event.target.value.toLocaleUpperCase('tr-TR'))} onKeyDown={(event) => event.key === 'Enter' && handleSearch()} />
+        <SearchOutlined className='searchIcon' onClick={() => handleSearch()} />
+      </div>
+      <Table
+        pagination={{
+          pageSize: perpage,
+          total: count,
+          showTotal: (total) => `${total} kayıt bulundu.`,
+          onChange: (page) => setIndex(page - 1),
+          pageSizeOptions: [10, 20, 50, 100],
+          showSizeChanger: true,
+          onShowSizeChange: (current, size) => {
+            setPerpage(size);
+            setIndex(0);
+          }
+        }}
+        dataSource={students}
+        columns={Columns}
+        rowKey={(record) => record._id}
+        loading={loading}
+        scroll={{ x: 400 }}
+        style={{ width: '100%' }}
+        size="small"
+      />
     </Flex>
   )
 }

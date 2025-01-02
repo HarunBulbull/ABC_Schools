@@ -395,6 +395,28 @@
     color: rgb(0, 128, 128, .5);
 }
 
+.PrintArea{
+    display: none;
+    @media print {
+        display: block;
+      }
+}
+
+.timesNewRoman h1,
+.timesNewRoman h2,
+.timesNewRoman h3,
+.timesNewRoman h4,
+.timesNewRoman h5,
+.timesNewRoman h6,
+.timesNewRoman p,
+.timesNewRoman span,
+.timesNewRoman b,
+.timesNewRoman th,
+.timesNewRoman td,
+.timesNewRoman li{
+    font-family: "Times New Roman";
+}
+
 @media (max-width: 950px){
     .paymentGrid{
         grid-template-columns: 1fr;
