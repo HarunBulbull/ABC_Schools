@@ -19,6 +19,10 @@ function ContactLayout({ children }) {
     window.location.reload();
   }
 
+  useEffect(() => {
+    nav('/profil')
+  }, [])
+
   window.addEventListener("resize", () => {
     if (window.innerWidth < 1156) { setCollapsed(true) }
   })
@@ -30,7 +34,7 @@ function ContactLayout({ children }) {
       path: '/profil',
       disabled: false
     },
-    {
+    /*{
       icon: <GatewayOutlined />,
       label: 'Rehberlik',
       path: '/rehberlik',
@@ -41,7 +45,7 @@ function ContactLayout({ children }) {
       label: 'Ödeme Geçmişi',
       path: '/odeme-gecmisi',
       disabled: true
-    },
+    },*/
   ]
 
   return (

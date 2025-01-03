@@ -42,7 +42,7 @@ function Karteks({ student, current, totalData, discounts, onClose }) {
         <Divider orientation="left">Önceki Dönem Bilgileri</Divider>
         <Flex vertical={true}>
           <p><b>Eğitim Baz Ücreti: </b>{student?.old?.education.toLocaleString('tr-TR')} ₺</p>
-          <p><b>Yiyecek Baz Ücreti: </b>{student?.old?.food.toLocaleString('tr-TR')} ₺</p>
+          <p><b>Yemek Baz Ücreti: </b>{student?.old?.food.toLocaleString('tr-TR')} ₺</p>
           <p><b>İndirimler:</b></p>
           <ul style={{ paddingLeft: "1rem" }}>
             {student?.olddiscounts.length > 0 ?
@@ -54,13 +54,13 @@ function Karteks({ student, current, totalData, discounts, onClose }) {
             }
           </ul>
           <p><b>Eğitim Net Ücreti: </b>{totalData.oldeducation.toLocaleString('tr-TR')} ₺</p>
-          <p><b>Yiyecek Net Ücreti: </b>{totalData.oldfood.toLocaleString('tr-TR')} ₺</p>
+          <p><b>Yemek Net Ücreti: </b>{totalData.oldfood.toLocaleString('tr-TR')} ₺</p>
           <p><b>Toplam Ödeme: </b>{(totalData.oldeducation + totalData.oldfood).toLocaleString('tr-TR')} ₺</p>
         </Flex>
         <Divider orientation="left">Dönem Bilgileri</Divider>
         <Flex vertical={true}>
           <p><b>Eğitim Baz Ücreti: </b>{student?.new?.education.toLocaleString('tr-TR')} ₺</p>
-          <p><b>Yiyecek Baz Ücreti: </b>{student?.new?.food.toLocaleString('tr-TR')} ₺</p>
+          <p><b>Yemek Baz Ücreti: </b>{student?.new?.food.toLocaleString('tr-TR')} ₺</p>
           <p><b>İndirimler:</b></p>
           <ul style={{ paddingLeft: "1rem" }}>
             {discounts.length > 0 ?
@@ -72,7 +72,7 @@ function Karteks({ student, current, totalData, discounts, onClose }) {
             }
           </ul>
           <p><b>Eğitim Net Ücreti: </b>{totalData.neweducation.toLocaleString('tr-TR')} ₺</p>
-          <p><b>Yiyecek Net Ücreti: </b>{totalData.newfood.toLocaleString('tr-TR')} ₺</p>
+          <p><b>Yemek Net Ücreti: </b>{totalData.newfood.toLocaleString('tr-TR')} ₺</p>
           <p><b>Toplam Ödeme: </b>{(totalData.neweducation + totalData.newfood).toLocaleString('tr-TR')} ₺</p>
         </Flex>
         <Divider orientation="left">Ödeme Planları</Divider>
@@ -91,7 +91,7 @@ function Karteks({ student, current, totalData, discounts, onClose }) {
         <Flex vertical={true}>
           <p><InfoCircleOutlined /> Öğrencilerin maksimum 4 adet indirimi olabilir, fazlası olursa en büyük dördü olacak şekilde indirimler uygulanır.</p>
           <p><InfoCircleOutlined /> Kardeş indirimlerinin ücreti, 2. ve sonrasındaki kardeşlerden düşülür.</p>
-          <p><InfoCircleOutlined /> Yemek ücretlerinde sadece PEŞİN ve TEK indirimleri geçerlidir.</p>
+          <p><InfoCircleOutlined /> Yemek ücretlerinde sadece peşin ve tek çekim indirim kalemleri uygulanmaktadır.</p>
           <p><InfoCircleOutlined /> Bu sayfa sadece bilgilendirme amaçlıdır. Öğrencinin okul kaydına esas eğitim bedeli ve indirim oranları, veli ile okul arasında düzenlenen öğrenci kayıt sözleşmesi ile kesinlik kazanır.</p>
         </Flex>
       </div>

@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
     }
 });
 
+
 router.post("/sinif", async (req, res) => {
     try {
         const { gradeLevel, homeRoom } = req.body;
@@ -26,6 +27,7 @@ router.post("/sinif", async (req, res) => {
             if(Number(gradeLevel) < 9){sinif = Number(gradeLevel) + '. Sınıf';}
             else{
                 if(homeRoom.toLowerCase().includes("fen")){sinif = Number(gradeLevel) + '. Sınıf Fen';}
+                else if(homeRoom.toLowerCase().includes("fl")){sinif = Number(gradeLevel) + '. Sınıf Fen';}
                 else{sinif = Number(gradeLevel) + '. Sınıf Anadolu';}
             }
         }else{

@@ -116,7 +116,7 @@ function ContactProfile() {
           <div className="rightSide">
             <h3>Ödeme Geçmişi</h3>
             <div className="payment">
-              <h4>Çok yakında...</h4>
+              <h4>2025 - 2026 Eğitim ve Öğretim Döneminden itibaren geçerli olacaktır.</h4>
             </div>
           </div>
         </div>

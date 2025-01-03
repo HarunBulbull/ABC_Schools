@@ -54,22 +54,6 @@ router.get("/teacher/:id", async (req, res) => {
     catch (error) { console.log("There is an error on getting teacher: " + error) }
 });
 
-
-router.get("/student/:id/enrollments", async (req, res) => {
-    const id = req.params.id;
-    try{
-        const token = await getToken();
-        const response = await fetch(`${url}/INTCore.Web/api/partner/sso/students/${id}/enrollments`, {
-            method: "GET",
-            headers: { 'Authorization': `Bearer ${token}` },
-        });
-        const getRes = await response.json();
-        if (response.ok) {res.status(200).json(getRes)}
-        else {res.status(400).json({ error: "There is an error: " + getRes.ErrorMessage })}
-    }
-    catch (error) { console.log("There is an error on getting enrollments: " + error) }
-});
-
 router.get("/contactStudents/:id", async (req, res) => {
     const id = req.params.id;
     try{

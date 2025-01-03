@@ -1,23 +1,55 @@
-const axios = require('axios');
 const crypto = require('crypto');
 const express = require("express");
 const router = express.Router();
 
-function generateHash(str) {
-    // UTF-8 encoding ile string'i byte array'e çevir
-    // SHA512 hash hesapla ve base64'e çevir
-    const hash = crypto.createHash('sha512')
-        .update(Buffer.from(str, 'utf8'))
-        .digest('base64');
-    return hash;
+const baseUrl = process.env.ZIRAAT_BASE_URL;
+const clientId = process.env.ZIRAAT_CLIENT_ID;
+const storeKey = process.env.ZIRAAT_STORE_KEY;
+const successUrl = process.env.SUCCESS_URL;
+const failUrl = process.env.FAIL_URL;
+const callbackUrl = process.env.CALLBACK_URL;
+
+function sha512(data) {
+    const hash = crypto.createHash('sha512');
+    hash.update(data, 'binary');
+    return hash.digest('base64');
 }
 
 router.get("/", async (req, res) => {
-    const testString = "91.96|billToCompany|name|https://abckoleji.obiziz.website/GenericVer3ResponseHandler.php|191407264|949|https://abckoleji.obiziz.website/GenericVer3ResponseHandler.php|ver3||tr|https://abckoleji.obiziz.website/GenericVer3ResponseHandler.php|5|1234|3D_PAY_HOSTING|Auth|Test1234";
-    
-    const hashResult = generateHash(testString);
-    console.log('Hash:', hashResult);
-    res.json({ hash: hashResult });
+    const orderId = crypto.randomBytes(12).toString('hex');
+    const date = new Date();
+    const rnd = Number(date.getYear() + "" + date.getMonth() + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds() + date.getMilliseconds())
+    const amount = "10.00";
+    const hashString = `${amount}|${callbackUrl}|${clientId}|949|${failUrl}|ver3|tr|${orderId}|${successUrl}|${rnd}|3d_pay_hosting|Auth|${storeKey}`;
+    const hash = sha512(hashString);
+
+    const formData = new URLSearchParams();
+    formData.append('clientid', clientId);
+    formData.append('storetype', "3d_pay_hosting");
+    formData.append('hash', hash);
+    formData.append('hashAlgorithm', "ver3");
+    formData.append('TranType', "Auth");
+    formData.append('amount', amount);
+    formData.append('currency', "949");
+    formData.append('oid', orderId);
+    formData.append('okUrl', successUrl);
+    formData.append('callbackUrl', callbackUrl);
+    formData.append('failUrl', failUrl);
+    formData.append('lang', "tr");
+    formData.append('rnd', rnd);
+
+    try {
+        const response = await fetch(`${baseUrl}`, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formData
+        });
+        const html = await response.text();
+        res.send(html);
+    } catch (err) { 
+        console.log(err); 
+        res.status(500).json({ success: false, err: err });
+    }
 });
 
 module.exports = router;

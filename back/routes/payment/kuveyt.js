@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
         hashData: HashData,
         amount: amount,
         currency: '0949',
-        installmentCount: req.body.installment === "Peşin" ? 1 : req.body.installment,
+        installmentCount: 1,
         customer: {email: 'noreply@kuveytturk.com.tr'},
         card: {
             cardNumber: req.body.cardNumber,

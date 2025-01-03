@@ -241,8 +241,6 @@ function Payment() {
                   <li><b>Geçerli Dönem: </b>{student.enrollment.yearID - 1} - {student.enrollment.yearID}</li>
                   <li><b>Kurum: </b>{student.enrollment.school.lea.name}</li>
                   <li><b>Okul: </b>{student.enrollment.school.name}</li>
-                  <li><b>Danışman: </b>H. Can Azapcı</li>
-                  <li><b>Rehber Öğretmen: </b>Uğur Özer</li>
                 </ul>
                 <span></span>
                 <h3>Ödeme Bilgileri</h3>
@@ -251,10 +249,10 @@ function Payment() {
                     <div className="paymentCard errorCard">
                       <ExclamationCircleOutlined className='cardIcon' />
                       <div className="paymentInfo">
-                        <h4>Dönem Borcu</h4>
+                        <h4>{student.enrollment.yearID} - {student.enrollment.yearID + 1} Eğitim ve Öğretim Dönemi Ödeme Bilgileri</h4>
                         <span></span>
-                        <p>Eğitim: {student?.new?.education.toLocaleString('tr-TR')}₺</p>
-                        <p>Yiyecek: {student?.new?.food.toLocaleString('tr-TR')}₺</p>
+                        <p>Eğitim Ödemesi: {student?.new?.education.toLocaleString('tr-TR')}₺</p>
+                        <p>Yemek Ödemesi: {student?.new?.food.toLocaleString('tr-TR')}₺</p>
                         <p>Ödenen: {student?.paid.toLocaleString('tr-TR')}₺</p>
                         <p>Kalan: {(student?.new?.education + student?.new?.food - student?.paid).toLocaleString('tr-TR')}₺</p>
                         <span></span>
@@ -277,7 +275,7 @@ function Payment() {
                   <div className="paymentInfo">
                     <h4>Bilgilendirme</h4>
                     <span></span>
-                    <p>Geçmiş dönem borçlarınız ve kayıt karteksinizi görüntülemek için <a href='#' onClick={() => setKarteks(true)}>buraya</a> tıklayınız.</p>
+                    <p>{student.enrollment.yearID} - {student.enrollment.yearID + 1} Eğitim ve öğretim dönemi kayıt karteksinizi görüntülemek için <a href='#' onClick={() => setKarteks(true)}>buraya</a> tıklayınız.</p>
                   </div>
                 </div>
               </div>
@@ -286,8 +284,8 @@ function Payment() {
             <h2>Veriler yükleniyor...</h2>
           }
         </div>
-        <div className="secondGrid" style={window.innerWidth > 950 ? { gridTemplateRows: paymentType === "Taksitli" ? "1fr auto 50px" : "1fr 50px" } : {}}>
-          <div className="upGrid" style={window.innerWidth > 950 ? { gridTemplateColumns: paymentType === "Taksitli" ? "1fr auto" : "1fr", gridTemplateRows: paymentType !== "Taksitli" ? "1fr auto" : "" } : {}}>
+        <div className="secondGrid">
+          <div className="upGrid">
             <div className="selectedCount">
               {
                 amount > 0 ?
@@ -313,7 +311,9 @@ function Payment() {
                       setDiscounts([...discounts, { name: e.target.value, value: (e.target.value === "OCAK TEK" ? current?.indirimler[12].value : current?.indirimler[14].value) }])
                     }>
                       <Flex vertical={true}>
+                        <Radio disabled={new Date().getMonth() != 0} value={"OCAK TEK"}>Ocak Ayı Peşin (Havale) (-{current?.indirimler[11].value}%)</Radio>
                         <Radio disabled={new Date().getMonth() != 0} value={"OCAK TEK"}>Ocak Ayı Tek Çekim (-{current?.indirimler[12].value}%)</Radio>
+                        <Radio disabled={new Date().getMonth() != 1} value={"ŞUBAT TEK"}>Şubat Ayı Peşin (Havale) (-{current?.indirimler[13].value}%)</Radio>
                         <Radio disabled={new Date().getMonth() != 1} value={"ŞUBAT TEK"}>Şubat Ayı Tek Çekim (-{current?.indirimler[14].value}%)</Radio>
                       </Flex>
                     </Radio.Group>

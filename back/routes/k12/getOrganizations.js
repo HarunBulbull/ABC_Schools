@@ -16,6 +16,137 @@ async function getData() {
     catch (error) { console.log("There is an error on getting token: " + error) }
 }
 
+router.get("/asd", async (req, res) => {
+    try {
+        const data = await getData();
+        let total = 101;
+        let index = 0;
+        const alldata = [];
+        while ((index * 100) < total) {
+            const response = await fetch(`${url}/INTCore.Web/api/partner/organizations/${data.id}/students`, {
+                method: "POST",
+                headers: {
+                    'Authorization': `Bearer ${data.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    $skip: index * 100,
+                    $take: 100,
+                    $includeTotalCount: true
+                })
+            });
+            total = await response.headers.get('totalcount');
+            const getRes = await response.json();
+            alldata.push(getRes);
+            index++;
+        }
+        const flatData = alldata.flat();
+
+        // Tekrarlanan TC'leri bul
+        const duplicateNationalIDs = flatData
+            .map(item => item.nationalID)
+            .filter((nationalID, index, array) => 
+                array.indexOf(nationalID) !== index
+            );
+
+        // Tekrarlanan TC'leri tekil hale getir
+        const uniqueDuplicateNationalIDs = [...new Set(duplicateNationalIDs)];
+
+        res.status(200).json(uniqueDuplicateNationalIDs);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Server Error." });
+    }
+});
+
+/*router.get("/asd", async (req, res) => {
+    try {
+        const data = await getData();
+        let total = 101;
+        let index = 0;
+        const alldata = [];
+        while ((index * 100) < total) {
+            const response = await fetch(`${url}/INTCore.Web/api/partner/organizations/${data.id}/students`, {
+                method: "POST",
+                headers: {
+                    'Authorization': `Bearer ${data.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    $skip: index * 100,
+                    $take: 100,
+                    $includeTotalCount: true
+                })
+            });
+            total = await response.headers.get('totalcount');
+            const getRes = await response.json();
+            alldata.push(getRes);
+            index++;
+        }
+        const flatData = alldata.flat();
+        const mongoStudents = await students.find().lean();
+        let sayilar = {
+            "3yas": 0,
+            "4yas": 0,
+            "5yas": 0,
+            "1.sinif": 0,
+            "2.sinif": 0,
+            "3.sinif": 0,
+            "4.sinif": 0,
+            "5.sinif": 0,
+            "6.sinif": 0,
+            "7.sinif": 0,
+            "8.sinif": 0,
+            "9.sinif al": 0,
+            "10.sinif al": 0,
+            "11.sinif al": 0,
+            "12.sinif al": 0,
+            "9.sinif fl": 0,
+            "10.sinif fl": 0,
+            "11.sinif fl": 0,
+            "12.sinif fl": 0,
+            "gecersiz": 0,
+        }
+
+        const allStudents = flatData.filter(k12Student => mongoStudents.some(mongoStudent => mongoStudent.id === k12Student.id));
+
+        allStudents.map(student => {
+            if (student.enrollment.homeroom == null) {
+                sayilar.gecersiz++;
+                console.log(student.nationalID + " " + student.enrollment.gradeLevel + " " + student.enrollment.homeroom);
+            } else {
+                let sinif = "";
+                if (
+                    student.enrollment.gradeLevel != "KG" ||
+                    student.enrollment.gradeLevel != "Kg" ||
+                    student.enrollment.gradeLevel != "kG" ||
+                    student.enrollment.gradeLevel != "kg"
+                ) {
+                    if (Number(student.enrollment.gradeLevel) < 9) { sinif = Number(student.enrollment.gradeLevel) + '.sinif'; }
+                    else {
+                        if (student.enrollment.homeroom.toLowerCase().includes("fen")) { sinif = Number(student.enrollment.gradeLevel) + '.sinif fl'; }
+                        else if (student.enrollment.homeroom.toLowerCase().includes("fl")) { sinif = Number(student.enrollment.gradeLevel) + '.sinif fl'; }
+                        else { sinif = Number(student.enrollment.gradeLevel) + '.sinif al'; }
+                    }
+                } else {
+                    if (student.enrollment.homeroom.includes("3")) { sinif = "3yas"; }
+                    else if (student.enrollment.homeroom.includes("4")) { sinif = "4yas"; }
+                    else { sinif = "5yas"; }
+                }
+
+                sayilar[`${sinif}`]++;
+            }
+        })
+
+        res.status(200).json(sayilar);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Server Error." });
+    }
+});*/
+
 /*router.get("/asd", async (req, res) => {
 
     fs.readFile('./eski.json', 'utf8', async (err, d) => {
@@ -123,12 +254,12 @@ router.get("/missDatas", async (req, res) => {
         flatData.map(flatItem => {
             const ind = mongoStudents.findIndex(k12Item => k12Item.id === flatItem.id);
             if (ind === -1) {
-                if(ok12.length > 0){
+                if (ok12.length > 0) {
                     const ind2 = ok12.findIndex(k12Item => k12Item.id === flatItem.id);
                     if (ind2 === -1) {
                         noData.push(flatItem);
                     }
-                }else{
+                } else {
                     noData.push(flatItem);
                 }
             }
